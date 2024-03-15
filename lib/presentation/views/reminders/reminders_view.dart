@@ -29,9 +29,8 @@ class RemindersViewState extends ConsumerState<RemindersView> {
   @override
   void initState() {
     onGetReminders();
-
     reminderListScrollController.addListener(() async {
-      if (reminderListScrollController.position.pixels + 250 >=
+      if (reminderListScrollController.position.pixels + 150 >=
           reminderListScrollController.position.maxScrollExtent) {
         await onLoadMoreReminders();
       }
@@ -143,6 +142,7 @@ class RemindersViewState extends ConsumerState<RemindersView> {
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: onAddReminder,
+        heroTag: 'addReminder',
         child: const Icon(Icons.add_outlined),
       ),
     );
@@ -219,27 +219,28 @@ class ReminderItemState extends ConsumerState<ReminderItem> {
               ),
               const SizedBox(height: 4),
               if (widget.reminder.tags != null)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: widget.reminder.tags!.map((tag) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: reminderAccentColor.withOpacity(0.4),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          '#$tag',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: [
+                    ...widget.reminder.tags!,
+                  ].take(10).map((tag) {
+                    return Container(
+                      // margin: const EdgeInsets.only(right: 5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: reminderAccentColor.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        '#$tag',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    );
+                  }).toList(),
                 ),
               Container(
                 padding: const EdgeInsets.only(top: 3),

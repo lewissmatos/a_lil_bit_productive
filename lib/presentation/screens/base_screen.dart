@@ -29,15 +29,24 @@ class BaseScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(screenNames[pageIndex]),
-        actions: [
-          IconButton(
+      appBar: PreferredSize(
+        preferredSize:
+            const Size.fromHeight(60), // Set the preferred height here
+        child: AppBar(
+          centerTitle: false,
+          title: Text(
+            screenNames[pageIndex],
+            style: const TextStyle(fontSize: 40),
+          ),
+          actions: [
+            IconButton(
               onPressed: toggleTheme,
               icon: Icon(isDarkMode
                   ? Icons.light_mode_outlined
-                  : Icons.dark_mode_outlined)),
-        ],
+                  : Icons.dark_mode_outlined),
+            ),
+          ],
+        ),
       ),
       body: IndexedStack(
         index: pageIndex,

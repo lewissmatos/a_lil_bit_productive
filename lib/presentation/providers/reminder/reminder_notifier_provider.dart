@@ -43,9 +43,7 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
     }
 
     List<Reminder>? reminders = await reminderRepository.getReminders(
-      isDone: isFilteringByPending,
-      offset: currentPage * 10,
-    );
+        isDone: isFilteringByPending, offset: currentPage * 10, limit: 10);
 
     state = [...state, ...reminders];
     isFetching = false;

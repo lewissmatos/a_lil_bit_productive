@@ -1,8 +1,7 @@
 import 'package:a_lil_bit_productive/domain/datasources/reminder_datasource.dart';
+import '../../domain/models/models.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../../domain/models/models.dart';
 
 class ReminderDatasourceImpl extends ReminderDatasource {
   late Future<Isar> isarDb;
@@ -15,7 +14,10 @@ class ReminderDatasourceImpl extends ReminderDatasource {
     final dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [ReminderSchema],
+        [
+          ReminderSchema,
+          NoteSchema,
+        ],
         inspector: true,
         directory: dir.path,
       );
