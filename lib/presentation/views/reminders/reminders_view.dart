@@ -16,30 +16,75 @@ class RemindersView extends ConsumerStatefulWidget {
 }
 
 class RemindersViewState extends ConsumerState<RemindersView> {
+  final ScrollController reminderListScrollController = ScrollController();
+
+  Future<void> onGetReminders() async {
+    await ref.read(reminderNotifierProvider.notifier).getReminders();
+  }
+
   @override
   void initState() {
+    onGetReminders();
+
+    reminderListScrollController.addListener(() async {
+      if (reminderListScrollController.position.pixels + 150 >=
+          reminderListScrollController.position.maxScrollExtent) {
+        await onGetReminders();
+      }
+    });
     super.initState();
-    ref.read(reminderNotifierProvider.notifier).getReminders();
+  }
+
+  @override
+  void dispose() {
+    reminderListScrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isFilteringByPending =
+        ref.watch(isFilteringByPendingProvider.notifier);
+
     final reminderNotifier = ref.watch(reminderNotifierProvider);
     void onAddReminder() {
       context.push('/base/0/new-reminder');
     }
 
+    void onFilterByDone() async {
+      isFilteringByPending.state = !isFilteringByPending.state;
+      await onGetReminders();
+    }
+
     return Scaffold(
-      body: Expanded(
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          itemCount: reminderNotifier.length,
-          itemBuilder: (context, index) {
-            final reminder = reminderNotifier[index];
-            return FadeInUp(child: ReminderItem(reminder: reminder));
-          },
+      body: Column(children: [
+        Container(
+          padding: const EdgeInsets.only(right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton.icon(
+                onPressed: onFilterByDone,
+                icon: const Icon(Icons.filter_alt_outlined, size: 18),
+                label: Text(isFilteringByPending.state
+                    ? 'pending: ${reminderNotifier.length}'
+                    : 'all: ${reminderNotifier.length}'),
+              ),
+            ],
+          ),
         ),
-      ),
+        Expanded(
+          child: ListView.builder(
+            controller: reminderListScrollController,
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            itemCount: reminderNotifier.length,
+            itemBuilder: (context, index) {
+              final reminder = reminderNotifier[index];
+              return FadeIn(child: ReminderItem(reminder: reminder));
+            },
+          ),
+        ),
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: onAddReminder,
         child: const Icon(Icons.add_outlined),

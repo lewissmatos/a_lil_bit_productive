@@ -6,6 +6,7 @@ abstract class ReminderDatasource {
     limit = 10,
     offset = 0,
     DateTime? date,
+    bool? isDone,
   });
 
   Future<Reminder> createReminder({required Reminder reminder});

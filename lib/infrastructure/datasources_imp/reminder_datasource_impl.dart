@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:a_lil_bit_productive/domain/datasources/reminder_datasource.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,28 +43,25 @@ class ReminderDatasourceImpl extends ReminderDatasource {
       limit = 10,
       offset = 0,
       DateTime? date,
-      bool isDone = false}) async {
+      bool? isDone}) async {
     final isar = await isarDb;
 
-    var query = isar.reminders.where().filter();
-    if (search != '') {
-      query = query.titleContains(search).descriptionContains(search);
-    }
+    var remindersQuery = isar.reminders;
 
-    final reminders = await query
-        .isDoneEqualTo(isDone)
+    List<Reminder> reminders;
+
+    isDone ??= true;
+    reminders = await remindersQuery
+        .filter()
+        .optional(isDone == true, (q) => q.isDoneEqualTo(!isDone!))
+        .optional(search != '',
+            (q) => q.titleContains(search)..descriptionContains(search))
         .sortByDate()
         .offset(offset)
         .limit(limit)
         .findAll();
 
     return reminders;
-  }
-
-  @override
-  Future<void> deleteReminder({required Reminder reminder}) {
-    // TODO: implement deleteReminder
-    throw UnimplementedError();
   }
 
   @override
@@ -73,7 +72,7 @@ class ReminderDatasourceImpl extends ReminderDatasource {
         await isar.reminders.where().idEqualTo(reminder.id).findFirst();
 
     if (reminderToUpdate == null) return null;
-    reminderToUpdate.isDone = true;
+    reminderToUpdate.isDone = !reminder.isDone;
     isar.writeTxn(() async {
       await isar.reminders.put(reminderToUpdate);
     });
@@ -84,6 +83,12 @@ class ReminderDatasourceImpl extends ReminderDatasource {
   @override
   Future<Reminder> updateReminder({required Reminder reminder}) {
     // TODO: implement updateReminder
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteReminder({required Reminder reminder}) {
+    // TODO: implement deleteReminder
     throw UnimplementedError();
   }
 }

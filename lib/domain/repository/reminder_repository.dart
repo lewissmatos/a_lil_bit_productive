@@ -5,6 +5,7 @@ abstract class ReminderRepository {
     search = '',
     limit = 10,
     int offset = 0,
+    bool? isDone,
     DateTime date,
   });
 

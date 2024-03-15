@@ -15,9 +15,17 @@ class ReminderRepositoryImpl extends ReminderRepository {
 
   @override
   Future<List<Reminder>> getReminders(
-      {search = '', limit = 10, int offset = 0, DateTime? date}) async {
+      {search = '',
+      limit = 10,
+      int offset = 0,
+      DateTime? date,
+      bool? isDone}) async {
     return await reminderDatasource.getReminders(
-        search: search, limit: limit, offset: offset, date: date);
+        search: search,
+        limit: limit,
+        offset: offset,
+        date: date,
+        isDone: isDone);
   }
 
   @override
