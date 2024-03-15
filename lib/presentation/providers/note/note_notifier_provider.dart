@@ -63,4 +63,13 @@ class NoteNotifier extends StateNotifier<List<Note?>> {
     state = [...state, ...notes];
     isFetching = false;
   }
+
+  Future<void> deleteNote({
+    required int noteId,
+  }) async {
+    await noteRepository.deleteNote(
+      noteId: noteId,
+    );
+    state = state.where((n) => n?.id != noteId).toList();
+  }
 }

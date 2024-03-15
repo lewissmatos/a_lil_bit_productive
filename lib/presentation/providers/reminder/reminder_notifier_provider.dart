@@ -98,4 +98,9 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
 
     return updatedReminder;
   }
+
+  Future<void> deleteReminder({required Reminder reminder}) async {
+    await reminderRepository.deleteReminder(reminder: reminder);
+    state = state.where((r) => r.id != reminder.id).toList();
+  }
 }

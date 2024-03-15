@@ -13,5 +13,5 @@ abstract class NoteRepository {
 
   Future<Note?> updateNote({required int noteId, required Note note});
 
-  Future<void> deleteNote({required Note note});
+  Future<void> deleteNote({required int noteId});
 }

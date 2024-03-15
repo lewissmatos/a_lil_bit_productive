@@ -86,12 +86,50 @@ class NewNoteScreenState extends ConsumerState<NewNoteScreen> {
     });
   }
 
+  Future<bool> confirmDismiss() async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Confirm"),
+              content: const Text("Are you sure you want to delete this item?"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      if (widget.noteId == null) return;
+                      ref
+                          .read(noteNotifierProvider.notifier)
+                          .deleteNote(noteId: widget.noteId!);
+                      Navigator.of(context).pop(true);
+                      context.go('/base/1');
+                    },
+                    child: const Text("DELETE",
+                        style: TextStyle(color: Colors.red))),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("CANCEL"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.noteId != null ? 'Edit Note' : 'New Note'),
         actions: [
+          if (widget.noteId != null)
+            TextButton(
+              onPressed: confirmDismiss,
+              child: const Text(
+                'delete',
+                style: TextStyle(fontSize: 16, color: Colors.red),
+              ),
+            ),
           TextButton(
             onPressed: isButtonDisabled ? null : saveNote,
             child: const Text(

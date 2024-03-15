@@ -44,8 +44,11 @@ class NoteDatasourceImpl implements NoteDatasource {
   }
 
   @override
-  Future<void> deleteNote({required Note note}) {
-    throw UnimplementedError();
+  Future<void> deleteNote({required int noteId}) async {
+    final isar = await isarDb;
+    await isar.writeTxn(() async {
+      await isar.notes.where().idEqualTo(noteId).deleteFirst();
+    });
   }
 
   @override
@@ -78,9 +81,6 @@ class NoteDatasourceImpl implements NoteDatasource {
       noteToUpdate.title = note.title;
       noteToUpdate.description = note.description;
       noteToUpdate.category = note.category;
-      //TODO: implement tasks update
-      // noteToUpdate.tasks.clear();
-      // noteToUpdate.tasks.addAll(note.tasks);
       await isar.writeTxn(() async {
         await isar.notes.put(noteToUpdate);
         // await noteToUpdate.tasks.save();

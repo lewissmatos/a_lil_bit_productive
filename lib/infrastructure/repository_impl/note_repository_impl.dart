@@ -14,8 +14,8 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<void> deleteNote({required Note note}) async {
-    return await noteDatasource.deleteNote(note: note);
+  Future<void> deleteNote({required int noteId}) async {
+    return await noteDatasource.deleteNote(noteId: noteId);
   }
 
   @override

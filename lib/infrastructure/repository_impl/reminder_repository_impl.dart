@@ -30,9 +30,8 @@ class ReminderRepositoryImpl extends ReminderRepository {
   }
 
   @override
-  Future<void> deleteReminder({required Reminder reminder}) {
-    // TODO: implement deleteReminder
-    throw UnimplementedError();
+  Future<void> deleteReminder({required Reminder reminder}) async {
+    return await reminderDatasource.deleteReminder(reminder: reminder);
   }
 
   @override

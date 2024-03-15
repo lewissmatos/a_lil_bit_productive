@@ -114,9 +114,12 @@ class ReminderDatasourceImpl extends ReminderDatasource {
   }
 
   @override
-  Future<void> deleteReminder({required Reminder reminder}) {
-    // TODO: implement deleteReminder
-    throw UnimplementedError();
+  Future<void> deleteReminder({required Reminder reminder}) async {
+    final isar = await isarDb;
+
+    await isar.writeTxn(() async {
+      await isar.reminders.where().idEqualTo(reminder.id).deleteFirst();
+    });
   }
 
   @override
