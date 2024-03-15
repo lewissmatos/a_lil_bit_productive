@@ -25,7 +25,16 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
     this.isFilteringByPending,
   }) : super([]);
 
-  Future<void> getReminders() async {
+  Future<void> getReminders({String? search}) async {
+    List<Reminder>? reminders = await reminderRepository.getReminders(
+      isDone: isFilteringByPending,
+      search: search,
+    );
+
+    state = reminders;
+  }
+
+  Future<void> loadMoreReminders() async {
     if (isFetching) return;
     isFetching = true;
 
@@ -49,18 +58,20 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
     return reminder;
   }
 
-  Future<Reminder> updateReminder(
-      {required int reminderId, required Reminder reminder}) async {
+  Future<Reminder> updateReminder({
+    required int reminderId,
+    required Reminder reminder,
+  }) async {
     final index = state.indexWhere((r) => r.id == reminderId);
-    if (index != -1) {
-      state = [
-        ...state.sublist(0, index),
-        reminder,
-        ...state.sublist(index + 1),
-      ];
-    }
-    await reminderRepository.updateReminder(
+
+    final newReminder = await reminderRepository.updateReminder(
         reminder: reminder, reminderId: reminderId);
+
+    state = [
+      ...state.sublist(0, index),
+      newReminder ?? reminder,
+      ...state.sublist(index + 1),
+    ];
     return reminder;
   }
 

@@ -49,6 +49,14 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+    tagsController.dispose();
+  }
+
   Future<Reminder?> onGetReminderById() async {
     if (widget.reminderId == null) return null;
     return await ref
@@ -173,7 +181,6 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
             ),
             TextField(
               controller: titleController,
-              // controller: TextEditingController(text: reminderData['title']),
               onChanged: (value) {
                 if (value.isEmpty) {
                   setState(() {

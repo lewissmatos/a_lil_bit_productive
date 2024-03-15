@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:a_lil_bit_productive/domain/datasources/reminder_datasource.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -51,11 +49,19 @@ class ReminderDatasourceImpl extends ReminderDatasource {
     List<Reminder> reminders;
 
     isDone ??= true;
+    search ??= '';
+
     reminders = await remindersQuery
         .filter()
         .optional(isDone == true, (q) => q.isDoneEqualTo(!isDone!))
-        .optional(search != '',
-            (q) => q.titleContains(search)..descriptionContains(search))
+        .optional(
+            search != '',
+            (q) => q
+                .titleContains(search)
+                .or()
+                .descriptionContains(search)
+                .or()
+                .tagsElementContains(search))
         .sortByDate()
         .offset(offset)
         .limit(limit)

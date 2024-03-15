@@ -17,9 +17,13 @@ class RemindersView extends ConsumerStatefulWidget {
 
 class RemindersViewState extends ConsumerState<RemindersView> {
   final ScrollController reminderListScrollController = ScrollController();
-
+  final searchController = TextEditingController();
   Future<void> onGetReminders() async {
     await ref.read(reminderNotifierProvider.notifier).getReminders();
+  }
+
+  Future<void> onLoadMoreReminders() async {
+    await ref.read(reminderNotifierProvider.notifier).loadMoreReminders();
   }
 
   @override
@@ -29,7 +33,7 @@ class RemindersViewState extends ConsumerState<RemindersView> {
     reminderListScrollController.addListener(() async {
       if (reminderListScrollController.position.pixels + 250 >=
           reminderListScrollController.position.maxScrollExtent) {
-        await onGetReminders();
+        await onLoadMoreReminders();
       }
     });
     super.initState();
@@ -59,20 +63,61 @@ class RemindersViewState extends ConsumerState<RemindersView> {
     return Scaffold(
       body: Column(children: [
         Container(
-          padding: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton.icon(
+              Expanded(
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    hintText: 'search',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            ref
+                                .read(reminderNotifierProvider.notifier)
+                                .getReminders(search: searchController.text);
+                          },
+                          icon: const Icon(Icons.search_outlined),
+                        ),
+                        if (searchController.text.isNotEmpty)
+                          IconButton(
+                            onPressed: () {
+                              searchController.clear();
+                              ref
+                                  .read(reminderNotifierProvider.notifier)
+                                  .getReminders();
+                            },
+                            icon: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.red,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
                 onPressed: onFilterByDone,
-                icon: const Icon(Icons.filter_alt_outlined, size: 18),
-                label: Text(isFilteringByPending.state
-                    ? 'pending: ${reminderNotifier.length}'
-                    : 'all: ${reminderNotifier.length}'),
+                icon: Icon(isFilteringByPending.state
+                    ? Icons.filter_alt_outlined
+                    : Icons.filter_alt),
               ),
             ],
           ),
         ),
+        const SizedBox(height: 6),
         Expanded(
           child: ListView.builder(
             controller: reminderListScrollController,
@@ -152,23 +197,12 @@ class ReminderItemState extends ConsumerState<ReminderItem> {
                       ],
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        DateFormat.yMMMEd()
-                            .add_Hm()
-                            .format(widget.reminder.date),
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      Checkbox(
-                        value: widget.reminder.isDone,
-                        onChanged: (value) {
-                          onMarkReminderAsDone();
-                        },
-                        activeColor: reminderAccentColor,
-                      )
-                    ],
+                  Checkbox(
+                    value: widget.reminder.isDone,
+                    onChanged: (value) {
+                      onMarkReminderAsDone();
+                    },
+                    activeColor: reminderAccentColor,
                   )
                 ],
               ),
@@ -196,6 +230,16 @@ class ReminderItemState extends ConsumerState<ReminderItem> {
                     }).toList(),
                   ),
                 ),
+              Container(
+                padding: const EdgeInsets.only(top: 3),
+                alignment: Alignment.centerRight,
+                child: Text(
+                  DateFormat.yMMMEd().add_Hm().format(widget.reminder.date),
+                  style: const TextStyle(
+                    fontSize: 11,
+                  ),
+                ),
+              )
             ],
           ),
         ),
