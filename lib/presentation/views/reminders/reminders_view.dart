@@ -47,6 +47,13 @@ class RemindersViewState extends ConsumerState<RemindersView> {
 
   @override
   Widget build(BuildContext context) {
+    void onSearchReminder(String? searchQuery) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      ref
+          .read(reminderNotifierProvider.notifier)
+          .getReminders(search: searchQuery);
+    }
+
     final isFilteringByPending =
         ref.watch(isFilteringByPendingProvider.notifier);
 
@@ -70,6 +77,10 @@ class RemindersViewState extends ConsumerState<RemindersView> {
               Expanded(
                 child: TextField(
                   controller: searchController,
+                  onSubmitted: (value) {
+                    if (value.isEmpty) return;
+                    onSearchReminder(value);
+                  },
                   decoration: InputDecoration(
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -84,15 +95,15 @@ class RemindersViewState extends ConsumerState<RemindersView> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            ref
-                                .read(reminderNotifierProvider.notifier)
-                                .getReminders(search: searchController.text);
+                            if (searchController.text.isEmpty) return;
+                            onSearchReminder(searchController.text);
                           },
                           icon: const Icon(Icons.search_outlined),
                         ),
                         if (searchController.text.isNotEmpty)
                           IconButton(
                             onPressed: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
                               searchController.clear();
                               ref
                                   .read(reminderNotifierProvider.notifier)

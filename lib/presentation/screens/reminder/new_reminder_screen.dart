@@ -297,7 +297,8 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
                 });
               },
               selectedColor:
-                  ColorHelper.getColorFromHex(reminderData['color'] ?? ''),
+                  ColorHelper.getColorFromHex(reminderData['color']) ??
+                      primaryColor,
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
