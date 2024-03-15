@@ -27,7 +27,7 @@ class RemindersViewState extends ConsumerState<RemindersView> {
     onGetReminders();
 
     reminderListScrollController.addListener(() async {
-      if (reminderListScrollController.position.pixels + 150 >=
+      if (reminderListScrollController.position.pixels + 250 >=
           reminderListScrollController.position.maxScrollExtent) {
         await onGetReminders();
       }
@@ -111,80 +111,93 @@ class ReminderItemState extends ConsumerState<ReminderItem> {
   @override
   Widget build(BuildContext context) {
     final reminderAccentColor =
-        ColorHelper.getColorFromHex(widget.reminder.color);
-    return Card(
-      elevation: 0,
-      color: reminderAccentColor.withOpacity(0.2),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        ColorHelper.getColorFromHex(widget.reminder.color) ??
+            Theme.of(context).primaryColor;
+
+    void onGoToReminderDetails() {
+      context.push('/base/0/reminder/${widget.reminder.id}');
+    }
+
+    return GestureDetector(
+      onTap: onGoToReminderDetails,
+      child: Card(
+        elevation: 0,
+        color: reminderAccentColor.withOpacity(0.2),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.reminder.title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        if (widget.reminder.description != null)
+                          Text(
+                            widget.reminder.description ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        widget.reminder.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
+                        DateFormat.yMMMEd()
+                            .add_Hm()
+                            .format(widget.reminder.date),
+                        style: const TextStyle(fontSize: 11),
                       ),
-                      if (widget.reminder.description != null)
-                        Text(
-                          widget.reminder.description ?? '',
-                          maxLines: 3,
-                        ),
+                      Checkbox(
+                        value: widget.reminder.isDone,
+                        onChanged: (value) {
+                          onMarkReminderAsDone();
+                        },
+                        activeColor: reminderAccentColor,
+                      )
                     ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 4),
+              if (widget.reminder.tags != null)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: widget.reminder.tags!.map((tag) {
+                      return Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: reminderAccentColor.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          '#$tag',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      DateFormat.yMMMEd().add_Hm().format(widget.reminder.date),
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    Checkbox(
-                      value: widget.reminder.isDone,
-                      onChanged: (value) {
-                        onMarkReminderAsDone();
-                      },
-                      activeColor: reminderAccentColor,
-                    )
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 4),
-            if (widget.reminder.tags != null)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: widget.reminder.tags!.map((tag) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: reminderAccentColor.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        '#$tag',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

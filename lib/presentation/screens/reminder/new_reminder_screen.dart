@@ -1,4 +1,5 @@
 import 'package:a_lil_bit_productive/helpers/color_helper.dart';
+import 'package:a_lil_bit_productive/presentation/providers/reminder/reminder_impl_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,8 @@ import '../../../domain/models/models.dart';
 import '../../providers/reminder/reminder_notifier_provider.dart';
 
 class NewReminderScreen extends ConsumerStatefulWidget {
-  const NewReminderScreen({super.key});
+  final int? reminderId;
+  const NewReminderScreen({super.key, this.reminderId});
 
   @override
   NewReminderScreenState createState() => NewReminderScreenState();
@@ -17,13 +19,48 @@ class NewReminderScreen extends ConsumerStatefulWidget {
 
 class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
   final Map<String, dynamic> reminderData = {};
-
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
+  late TextEditingController tagsController;
   bool isButtonDisabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    titleController = TextEditingController();
+    descriptionController = TextEditingController();
+    tagsController = TextEditingController();
+
+    if (widget.reminderId != null) {
+      onGetReminderById().then((reminder) {
+        if (reminder == null) return;
+        setState(() {
+          reminderData['title'] = reminder.title;
+          isButtonDisabled = false;
+          reminderData['description'] = reminder.description ?? '';
+          reminderData['date'] = reminder.date;
+          reminderData['tags'] = reminder.tags?.join(', ') ?? '';
+          reminderData['color'] = reminder.color;
+          titleController.text = reminder.title;
+          descriptionController.text = reminder.description ?? '';
+          tagsController.text = reminder.tags?.join(', ') ?? '';
+        });
+      });
+    }
+  }
+
+  Future<Reminder?> onGetReminderById() async {
+    if (widget.reminderId == null) return null;
+    return await ref
+        .read(reminderRepositoryImplProvider)
+        .getReminderById(reminderId: widget.reminderId!);
+  }
+
   void onOpenDatePicker() async {
     final selectedDate = await showDatePicker(
       context: context,
       initialDate: reminderData['date'] ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: reminderData['date'] ?? DateTime.now(),
       lastDate: DateTime(2100),
     );
 
@@ -76,16 +113,19 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
       description: reminderData['description'],
       date: reminderData['date'] ?? DateTime.now(),
       tags: tags,
-      color: reminderData['color'] ??
-          ColorHelper.getHexFromColor(Theme.of(context).primaryColor),
+      color: reminderData['color'] ?? '',
     );
 
     final reminderNotifier = ref.read(reminderNotifierProvider.notifier);
 
-    await reminderNotifier.addReminder(reminder: reminder);
-
+    if (widget.reminderId == null) {
+      await reminderNotifier.addReminder(reminder: reminder);
+    } else {
+      await reminderNotifier.updateReminder(
+          reminder: reminder, reminderId: widget.reminderId!);
+    }
     setState(() {
-      reminderData.clear();
+      // reminderData.clear();
       isButtonDisabled = true;
     });
 
@@ -95,8 +135,8 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
         content: const Text('reminder created successfully!'),
         duration: const Duration(milliseconds: 1500),
         padding: const EdgeInsets.symmetric(
-          vertical: 14, // Inner padding for SnackBar content.
-          horizontal: 10, // Inner padding for SnackBar content.
+          vertical: 14,
+          horizontal: 10,
         ),
         behavior: SnackBarBehavior.fixed,
         shape: RoundedRectangleBorder(
@@ -111,141 +151,155 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('new reminder'),
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    return Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: reminderData['color'] != null
+                  ? ColorHelper.getColorFromHex(reminderData['color'])
+                  : primaryColor,
+            ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: Text('title *'),
-          ),
-          TextField(
-            onChanged: (value) {
-              if (value.isEmpty) {
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.reminderId != null ? 'details' : 'new reminder'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Text('title *'),
+            ),
+            TextField(
+              controller: titleController,
+              // controller: TextEditingController(text: reminderData['title']),
+              onChanged: (value) {
+                if (value.isEmpty) {
+                  setState(() {
+                    isButtonDisabled = true;
+                  });
+                } else {
+                  isButtonDisabled = false;
+                }
                 setState(() {
-                  isButtonDisabled = true;
+                  reminderData['title'] = value;
                 });
-                return;
-              }
-              setState(() {
-                reminderData['title'] = value;
-                isButtonDisabled = false;
-              });
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: 'example: beber romo 3 veces a la semana',
+                hintStyle: const TextStyle(fontSize: 14),
+                filled: true,
               ),
-              hintText: 'example: beber romo 3 veces a la semana',
-              hintStyle: const TextStyle(fontSize: 14),
-              filled: true,
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            child: Text('description'),
-          ),
-          TextField(
-            onChanged: (value) {
-              setState(() {
-                reminderData['description'] = value;
-              });
-            },
-            minLines: 5,
-            maxLines: 15,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
-              ),
-              hintText: 'enter description',
-              hintStyle: const TextStyle(fontSize: 14),
-              filled: true,
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Text('description'),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            child: Text('tags'),
-          ),
-          TextField(
-            onChanged: (value) {
-              setState(() {
-                reminderData['tags'] = value;
-              });
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
+            TextField(
+              controller: descriptionController,
+              onChanged: (value) {
+                setState(() {
+                  reminderData['description'] = value;
+                });
+              },
+              minLines: 5,
+              maxLines: 15,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: 'enter description',
+                hintStyle: const TextStyle(fontSize: 14),
+                filled: true,
               ),
-              hintText: 'exercise, work, etc.',
-              hintStyle: const TextStyle(fontSize: 14),
-              filled: true,
             ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton.icon(
-                onPressed: onOpenDatePicker,
-                icon: const Icon(Icons.calendar_month_outlined),
-                label: Text(
-                  DateFormat('yyyy-MM-dd')
-                      .format(reminderData['date'] ?? DateTime.now()),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Text('tags'),
+            ),
+            TextField(
+              controller: tagsController,
+              onChanged: (value) {
+                setState(() {
+                  reminderData['tags'] = value;
+                });
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                ),
+                hintText: 'exercise, work, etc.',
+                hintStyle: const TextStyle(fontSize: 14),
+                filled: true,
               ),
-              ElevatedButton.icon(
-                onPressed: onOpenTimePicker,
-                icon: const Icon(Icons.timer_outlined),
-                label: Text(
-                  DateFormat('HH:mm')
-                      .format(reminderData['date'] ?? DateTime.now()),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: onOpenDatePicker,
+                  icon: const Icon(Icons.calendar_month_outlined),
+                  label: Text(
+                    DateFormat('yyyy-MM-dd')
+                        .format(reminderData['date'] ?? DateTime.now()),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 16),
+                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                ElevatedButton.icon(
+                  onPressed: onOpenTimePicker,
+                  icon: const Icon(Icons.timer_outlined),
+                  label: Text(
+                    DateFormat('HH:mm')
+                        .format(reminderData['date'] ?? DateTime.now()),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 16),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          MaterialColorPicker(
-            alignment: WrapAlignment.end,
-            circleSize: 30,
-            shrinkWrap: true,
-            allowShades: false,
-            colors: const [
-              Colors.blue,
-              Colors.red,
-              Colors.green,
-              Colors.orange
-            ],
-            onMainColorChange: (color) {
-              if (color == null) return;
-              final selectedColor = ColorHelper.getHexFromColorSwatch(color);
-              setState(() {
-                reminderData['color'] = selectedColor;
-              });
-            },
-            selectedColor:
-                ColorHelper.getColorFromHex(reminderData['color'] ?? ''),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton.icon(
-            onPressed: isButtonDisabled ? null : saveReminder,
-            label: const Text('save reminder'),
-            icon: const Icon(Icons.save_outlined),
-          ),
-        ]),
+              ],
+            ),
+            const SizedBox(height: 10),
+            MaterialColorPicker(
+              alignment: WrapAlignment.end,
+              circleSize: 30,
+              shrinkWrap: true,
+              allowShades: false,
+              colors: [
+                ColorHelper.getColorSwatchFormColor(primaryColor),
+                Colors.red,
+                Colors.green,
+                Colors.orange
+              ],
+              onMainColorChange: (color) {
+                if (color == null) return;
+                final selectedColor = ColorHelper.getHexFromColorSwatch(color);
+                setState(() {
+                  reminderData['color'] = selectedColor;
+                });
+              },
+              selectedColor:
+                  ColorHelper.getColorFromHex(reminderData['color'] ?? ''),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: isButtonDisabled ? null : saveReminder,
+              label: const Text('save reminder'),
+              icon: const Icon(Icons.save_outlined),
+            ),
+          ]),
+        ),
       ),
     );
   }

@@ -49,15 +49,31 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
     return reminder;
   }
 
-  Future<Reminder?> markReminderAsDone(
-      {required Reminder reminder, bool? isDone}) async {
+  Future<Reminder> updateReminder(
+      {required int reminderId, required Reminder reminder}) async {
+    final index = state.indexWhere((r) => r.id == reminderId);
+    if (index != -1) {
+      state = [
+        ...state.sublist(0, index),
+        reminder,
+        ...state.sublist(index + 1),
+      ];
+    }
+    await reminderRepository.updateReminder(
+        reminder: reminder, reminderId: reminderId);
+    return reminder;
+  }
+
+  Future<Reminder?> markReminderAsDone({
+    required Reminder reminder,
+  }) async {
     final updatedReminder = await reminderRepository.markReminderAsDone(
       reminder: reminder,
     );
 
     if (updatedReminder != null) {
       final index = state.indexWhere((r) => r.id == updatedReminder.id);
-      if (isDone == true) {
+      if (isFilteringByPending == true) {
         state = [
           ...state.sublist(0, index),
           ...state.sublist(index + 1),

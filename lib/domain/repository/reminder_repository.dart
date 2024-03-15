@@ -11,7 +11,10 @@ abstract class ReminderRepository {
 
   Future<Reminder> createReminder({required Reminder reminder});
 
-  Future<Reminder> updateReminder({required Reminder reminder});
+  Future<Reminder?> getReminderById({required int reminderId});
+
+  Future<Reminder?> updateReminder(
+      {required int reminderId, required Reminder reminder});
 
   Future<void> deleteReminder({required Reminder reminder});
 

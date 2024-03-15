@@ -5,13 +5,13 @@ part 'reminder.g.dart';
 @collection
 class Reminder {
   Id id = Isar.autoIncrement;
-  final String title;
-  final String? description;
+  late String title;
+  late String? description;
   late DateTime date;
   late DateTime? createdAt;
   late bool isDone;
-  final List<String>? tags;
-  final String? color;
+  late List<String>? tags;
+  late String? color;
 
   Reminder({
     required this.title,

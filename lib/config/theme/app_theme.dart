@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   final bool isDarkMode;
-
-  AppTheme({this.isDarkMode = false});
+  final Color colorSchemeSeed;
+  AppTheme({this.isDarkMode = false, this.colorSchemeSeed = Colors.blue});
 
   ThemeData getTheme() => ThemeData(
-      colorSchemeSeed: Colors.blue,
+      colorSchemeSeed: colorSchemeSeed,
       brightness: isDarkMode ? Brightness.dark : Brightness.light);
 }

@@ -81,14 +81,40 @@ class ReminderDatasourceImpl extends ReminderDatasource {
   }
 
   @override
-  Future<Reminder> updateReminder({required Reminder reminder}) {
-    // TODO: implement updateReminder
-    throw UnimplementedError();
+  Future<Reminder?> updateReminder({
+    required int reminderId,
+    required Reminder reminder,
+  }) async {
+    final isar = await isarDb;
+
+    var reminderToUpdate =
+        await isar.reminders.where().idEqualTo(reminderId).findFirst();
+
+    if (reminderToUpdate == null) return null;
+
+    reminderToUpdate.title = reminder.title;
+    reminderToUpdate.description = reminder.description;
+    reminderToUpdate.date = reminder.date;
+    reminderToUpdate.isDone = reminder.isDone;
+    reminderToUpdate.color = reminder.color;
+
+    await isar.writeTxn(() async {
+      await isar.reminders.put(reminderToUpdate);
+    });
+
+    return reminderToUpdate;
   }
 
   @override
   Future<void> deleteReminder({required Reminder reminder}) {
     // TODO: implement deleteReminder
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Reminder?> getReminderById({required int reminderId}) async {
+    final isar = await isarDb;
+
+    return await isar.reminders.where().idEqualTo(reminderId).findFirst();
   }
 }

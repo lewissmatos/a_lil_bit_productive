@@ -21,11 +21,12 @@ class ReminderRepositoryImpl extends ReminderRepository {
       DateTime? date,
       bool? isDone}) async {
     return await reminderDatasource.getReminders(
-        search: search,
-        limit: limit,
-        offset: offset,
-        date: date,
-        isDone: isDone);
+      search: search,
+      limit: limit,
+      offset: offset,
+      date: date,
+      isDone: isDone,
+    );
   }
 
   @override
@@ -40,8 +41,14 @@ class ReminderRepositoryImpl extends ReminderRepository {
   }
 
   @override
-  Future<Reminder> updateReminder({required Reminder reminder}) {
-    // TODO: implement updateReminder
-    throw UnimplementedError();
+  Future<Reminder?> updateReminder(
+      {required int reminderId, required Reminder reminder}) async {
+    return await reminderDatasource.updateReminder(
+        reminder: reminder, reminderId: reminderId);
+  }
+
+  @override
+  Future<Reminder?> getReminderById({required int reminderId}) async {
+    return await reminderDatasource.getReminderById(reminderId: reminderId);
   }
 }

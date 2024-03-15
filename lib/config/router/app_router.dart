@@ -17,7 +17,17 @@ final appRouter = GoRouter(
             GoRoute(
               path: 'new-reminder',
               builder: (context, state) {
-                return NewReminderScreen();
+                return const NewReminderScreen();
+              },
+            ),
+            GoRoute(
+              path: 'reminder/:reminderId',
+              builder: (context, state) {
+                final reminderId = state.pathParameters['reminderId'] != null
+                    ? int.parse(state.pathParameters['reminderId']!)
+                    : null;
+
+                return NewReminderScreen(reminderId: reminderId);
               },
             ),
           ]),
