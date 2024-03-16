@@ -1,7 +1,7 @@
 import 'package:a_lil_bit_productive/domain/datasources/reminder_datasource.dart';
 import 'package:a_lil_bit_productive/domain/repository/reminder_repository.dart';
 
-import '../../domain/models/models.dart';
+import '../../domain/entities/entities.dart';
 
 class ReminderRepositoryImpl extends ReminderRepository {
   final ReminderDatasource reminderDatasource;

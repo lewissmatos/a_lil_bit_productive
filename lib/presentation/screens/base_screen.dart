@@ -15,7 +15,7 @@ class BaseScreen extends ConsumerWidget {
     RemindersView(),
     NotesView(),
     ExpensesView(),
-    ExpensesView(),
+    IdlenessView(),
   ];
 
   const BaseScreen({super.key, required this.pageIndex});

@@ -1,5 +1,5 @@
 import 'package:a_lil_bit_productive/domain/datasources/note_datasource.dart';
-import 'package:a_lil_bit_productive/domain/models/models.dart';
+import 'package:a_lil_bit_productive/domain/entities/entities.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 

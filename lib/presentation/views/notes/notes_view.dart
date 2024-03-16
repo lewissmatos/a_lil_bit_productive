@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../domain/models/models.dart';
+import '../../../domain/entities/entities.dart';
 import '../../providers/providers.dart';
 
 class NotesView extends ConsumerStatefulWidget {
@@ -136,7 +136,7 @@ class _NoteItemState extends State<NoteItem> {
               ),
               Text(
                 widget.note.description ?? '',
-                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 16),
                 maxLines: 10,
                 overflow: TextOverflow.ellipsis,
               )

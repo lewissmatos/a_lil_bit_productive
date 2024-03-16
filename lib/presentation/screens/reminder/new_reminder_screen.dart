@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
-import '../../../domain/models/models.dart';
+import '../../../domain/entities/entities.dart';
 import '../../providers/reminder/reminder_notifier_provider.dart';
 
 class NewReminderScreen extends ConsumerStatefulWidget {

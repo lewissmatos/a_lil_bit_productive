@@ -1,7 +1,7 @@
 import 'package:a_lil_bit_productive/domain/datasources/note_datasource.dart';
 import 'package:a_lil_bit_productive/domain/repository/note_repository.dart';
 
-import '../../domain/models/models.dart';
+import '../../domain/entities/entities.dart';
 
 class NoteRepositoryImpl extends NoteRepository {
   final NoteDatasource noteDatasource;

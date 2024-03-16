@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../domain/models/models.dart';
+import '../../../domain/entities/reminder.dart';
 import '../../../helpers/color_helper.dart';
 import '../../providers/reminder/reminder_notifier_provider.dart';
 
@@ -173,32 +173,6 @@ class ReminderViewItemState extends ConsumerState<ReminderViewItem> {
   }
 }
 
-class DismissibleItemSecondaryBackground extends StatelessWidget {
-  const DismissibleItemSecondaryBackground({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: const Align(
-        alignment: Alignment.centerRight,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Icon(Icons.delete, color: Colors.white),
-            Text(" Delete",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w700)),
-            SizedBox(width: 20),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class DismissibleItemBackground extends StatelessWidget {
   final bool isDone;
   const DismissibleItemBackground({
@@ -223,6 +197,32 @@ class DismissibleItemBackground extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                 )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DismissibleItemSecondaryBackground extends StatelessWidget {
+  const DismissibleItemSecondaryBackground({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.red,
+      child: const Align(
+        alignment: Alignment.centerRight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(Icons.delete, color: Colors.white),
+            Text(" Delete",
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w700)),
+            SizedBox(width: 20),
           ],
         ),
       ),

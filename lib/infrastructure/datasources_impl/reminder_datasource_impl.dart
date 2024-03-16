@@ -1,5 +1,5 @@
 import 'package:a_lil_bit_productive/domain/datasources/reminder_datasource.dart';
-import '../../domain/models/models.dart';
+import '../../domain/entities/entities.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -17,6 +17,7 @@ class ReminderDatasourceImpl extends ReminderDatasource {
         [
           ReminderSchema,
           NoteSchema,
+          ShortStorySchema,
         ],
         inspector: true,
         directory: dir.path,

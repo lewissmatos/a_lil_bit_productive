@@ -1,4 +1,4 @@
-import '../models/models.dart';
+import '../entities/entities.dart';
 
 abstract class NoteDatasource {
   Future<List<Note?>> getNotes({

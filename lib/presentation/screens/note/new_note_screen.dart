@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../domain/models/models.dart';
-import '../../../helpers/color_helper.dart';
+import '../../../domain/entities/entities.dart';
 import '../../providers/providers.dart';
 import '../../views/notes/note_category_helper.dart';
 

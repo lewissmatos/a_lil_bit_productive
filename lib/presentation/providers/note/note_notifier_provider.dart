@@ -1,4 +1,4 @@
-import 'package:a_lil_bit_productive/domain/models/models.dart';
+import 'package:a_lil_bit_productive/domain/entities/entities.dart';
 import 'package:a_lil_bit_productive/domain/repository/note_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

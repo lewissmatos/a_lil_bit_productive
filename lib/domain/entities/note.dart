@@ -1,4 +1,3 @@
-import 'package:a_lil_bit_productive/domain/models/models.dart';
 import 'package:isar/isar.dart';
 
 part 'note.g.dart';

@@ -1,4 +1,4 @@
-import 'package:a_lil_bit_productive/domain/models/models.dart';
+import 'package:a_lil_bit_productive/domain/entities/entities.dart';
 import 'package:flutter/material.dart';
 
 class Category {
