@@ -1,3 +1,4 @@
+import 'package:a_lil_bit_productive/presentation/screens/idleness/bookmarked_stories_screen.dart';
 import 'package:a_lil_bit_productive/presentation/screens/note/new_note_screen.dart';
 import 'package:a_lil_bit_productive/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
@@ -44,6 +45,12 @@ final appRouter = GoRouter(
                   : null;
 
               return NewNoteScreen(noteId: noteId);
+            },
+          ),
+          GoRoute(
+            path: 'short-story',
+            builder: (context, state) {
+              return const ShortStoryScreen();
             },
           ),
         ],

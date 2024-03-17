@@ -20,7 +20,7 @@ class ShortStoryDatasourceImpl extends ShortStoryDatasource {
   Future<Isar> openIsarDb() async {
     final dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
+      return Isar.openSync(
         [
           ReminderSchema,
           NoteSchema,
@@ -96,5 +96,16 @@ class ShortStoryDatasourceImpl extends ShortStoryDatasource {
       });
       return story;
     }
+  }
+
+  @override
+  Future<List<ShortStory?>> getBookmarkedStories() async {
+    final isar = await isarDb;
+
+    late List<ShortStory?> stories;
+    await isar.txn(() async {
+      stories = await isar.shortStorys.where().findAll();
+    });
+    return stories;
   }
 }

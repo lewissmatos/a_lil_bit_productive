@@ -68,7 +68,7 @@ class NewNoteScreenState extends ConsumerState<NewNoteScreen> {
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('reminder created successfully!'),
+        content: const Text('note created successfully!'),
         duration: const Duration(milliseconds: 1500),
         padding: const EdgeInsets.symmetric(
           vertical: 14,

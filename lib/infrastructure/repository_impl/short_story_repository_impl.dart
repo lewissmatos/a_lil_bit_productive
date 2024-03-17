@@ -21,4 +21,9 @@ class ShortStoryRepositoryImpl extends ShortStoryRepository {
   Future<ShortStory?> bookmarkShortStory({required ShortStory story}) async {
     return await shortStoryDatasource.bookmarkShortStory(story: story);
   }
+
+  @override
+  Future<List<ShortStory?>> getBookmarkedStories() async {
+    return await shortStoryDatasource.getBookmarkedStories();
+  }
 }

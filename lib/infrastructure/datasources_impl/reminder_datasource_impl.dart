@@ -13,7 +13,7 @@ class ReminderDatasourceImpl extends ReminderDatasource {
   Future<Isar> openIsarDb() async {
     final dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
+      return Isar.openSync(
         [
           ReminderSchema,
           NoteSchema,

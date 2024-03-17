@@ -6,4 +6,6 @@ abstract class ShortStoryDatasource {
   Future<ShortStory> getShortStory();
 
   Future<ShortStory?> bookmarkShortStory({required ShortStory story});
+
+  Future<List<ShortStory?>> getBookmarkedStories();
 }
