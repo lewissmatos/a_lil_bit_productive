@@ -13,8 +13,8 @@ typedef CategoryMap = Map<CategoriesEnum, Category>;
 class NoteCategoryHelper {
   static final List<String> emojis = [
     '👨‍💻',
-    '👤',
     '📚',
+    '👤',
     '🛠️',
   ];
 

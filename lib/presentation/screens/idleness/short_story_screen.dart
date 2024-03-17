@@ -1,8 +1,10 @@
+import 'package:a_lil_bit_productive/presentation/providers/providers.dart';
 import 'package:a_lil_bit_productive/presentation/providers/short_story/short_story_impl_provider.dart';
 import 'package:a_lil_bit_productive/presentation/screens/idleness/bookmarked_stories_screen.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../domain/entities/entities.dart';
 
@@ -14,8 +16,11 @@ class ShortStoryScreen extends ConsumerStatefulWidget {
 }
 
 class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
+  late TextEditingController storyDescriptionController;
+
   ShortStory story = ShortStory(storyId: '', title: '', description: '');
   bool isStoryFetched = false;
+  late bool isCreatingNote = false;
 
   @override
   void initState() {
@@ -33,6 +38,8 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
       setState(() {
         story = value;
         isStoryFetched = true;
+        storyDescriptionController =
+            TextEditingController(text: value.description);
       });
     });
 
@@ -42,12 +49,15 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
   void setStoryValue(ShortStory newStory) {
     setState(() {
       story = newStory;
+      storyDescriptionController =
+          TextEditingController(text: newStory.description);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final shortStoryProvider = ref.read(shortStoryRepositoryImplProvider);
+    var noteData = Note(title: '');
 
     Future<ShortStory?> bookmarkShortStory() async {
       return await shortStoryProvider
@@ -67,6 +77,43 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
         builder: (BuildContext context) {
           return BookmarkedStoriesScreen(setStoryValue: setStoryValue);
         },
+      );
+    }
+
+    void onSaveNote() async {
+      if (!storyDescriptionController.selection.isValid) return;
+      String selectedText = (storyDescriptionController.selection
+          .textInside(storyDescriptionController.text));
+
+      final createdNote = await ref.read(noteNotifierProvider.notifier).addNote(
+              note: noteData.copyWith(
+            title: story.title,
+            description: '$selectedText\n\n-${story.moral}',
+            category: CategoriesEnum.personal,
+          ));
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('note created successfully!'),
+          duration: const Duration(milliseconds: 1500),
+          padding: const EdgeInsets.symmetric(
+            vertical: 14,
+            horizontal: 10,
+          ),
+          behavior: SnackBarBehavior.fixed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          action: SnackBarAction(
+            label: 'View',
+            onPressed: () {
+              if (createdNote != null) {
+                context.push('/base/1/note/${createdNote.id}');
+              }
+            },
+          ),
+        ),
       );
     }
 
@@ -117,35 +164,57 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
                 child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Stack(children: [
-                      ShortStoryContainer(story: story),
+                      ShortStoryContainer(
+                        storyDescriptionController: storyDescriptionController,
+                        story: story,
+                        isCreatingNote: isCreatingNote,
+                      ),
                       Positioned(
                         bottom: 40,
                         right: 0,
                         child: FadeOut(
-                          child: Column(children: [
-                            IconButton.filledTonal(
-                              onPressed: () async {
-                                await bookmarkShortStory();
-                              },
-                              icon: Icon(
-                                !story.isBookmarked
-                                    ? Icons.bookmark_add_outlined
-                                    : Icons.bookmark_remove_outlined,
-                                color: !story.isBookmarked
-                                    ? Colors.green
-                                    : Colors.orange,
-                              ),
-                            ),
-                            IconButton.filledTonal(
-                              onPressed: () async {
-                                setState(() {
-                                  isStoryFetched = false;
-                                });
-                                await fetchStory();
-                              },
-                              icon: const Icon(Icons.next_plan_outlined),
-                            ),
-                          ]),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                IconButton.filledTonal(
+                                  onPressed: () async {
+                                    await bookmarkShortStory();
+                                  },
+                                  icon: Icon(
+                                    !story.isBookmarked
+                                        ? Icons.bookmark_add_outlined
+                                        : Icons.bookmark_remove_outlined,
+                                    color: !story.isBookmarked
+                                        ? Colors.green
+                                        : Colors.orange,
+                                  ),
+                                ),
+                                IconButton.filledTonal(
+                                  // label: const Text(''),
+                                  onPressed: () async {
+                                    if (isCreatingNote) {
+                                      onSaveNote();
+                                    }
+                                    setState(() {
+                                      isCreatingNote = !isCreatingNote;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    !isCreatingNote
+                                        ? Icons.edit_note_outlined
+                                        : Icons.check,
+                                  ),
+                                ),
+                                IconButton.filledTonal(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isStoryFetched = false;
+                                    });
+                                    await fetchStory();
+                                  },
+                                  icon: const Icon(Icons.next_plan_outlined),
+                                ),
+                              ]),
                         ),
                       ),
                     ])),
@@ -155,18 +224,32 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
   }
 }
 
-class ShortStoryContainer extends StatelessWidget {
+class ShortStoryContainer extends StatefulWidget {
   final ShortStory story;
-  const ShortStoryContainer({
+  final bool isCreatingNote;
+  late TextEditingController storyDescriptionController;
+
+  ShortStoryContainer({
+    this.isCreatingNote = false,
+    required this.storyDescriptionController,
     required this.story,
     super.key,
   });
 
   @override
+  State<ShortStoryContainer> createState() => _ShortStoryContainerState();
+}
+
+class _ShortStoryContainerState extends State<ShortStoryContainer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height, // or any specific height
-
+      height: MediaQuery.of(context).size.height,
       child: ListView(
         children: [
           Row(
@@ -175,7 +258,7 @@ class ShortStoryContainer extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  story.title,
+                  widget.story.title,
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -183,38 +266,38 @@ class ShortStoryContainer extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              if (story.isBookmarked)
+              if (widget.story.isBookmarked)
                 const Icon(Icons.bookmark_added_outlined,
                     size: 30, color: Colors.green),
             ],
           ),
           const SizedBox(height: 10),
-          Text(
-            story.description,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          // TextField(
-          //   controller: TextEditingController(text: story.description),
-          //   maxLines: 20,
-          //   readOnly: true,
-          //   style: const TextStyle(
-          //     fontSize: 18,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   decoration: const InputDecoration(
-          //     isCollapsed: true,
-          //     border: OutlineInputBorder(
-          //       borderSide: BorderSide.none,
-          //     ),
-          //     hintText: 'more details',
-          //   ),
-          // ),
+          !widget.isCreatingNote
+              ? Text(
+                  widget.story.description,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                  ),
+                )
+              : TextField(
+                  controller: widget.storyDescriptionController,
+                  maxLines: null,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  decoration: const InputDecoration(
+                    isCollapsed: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'more details',
+                  ),
+                ),
           const SizedBox(height: 10),
           Text(
-            '-${story.moral}',
+            '-${widget.story.moral}',
             style: const TextStyle(
               fontSize: 16,
             ),
