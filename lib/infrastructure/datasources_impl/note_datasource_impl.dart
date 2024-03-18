@@ -29,7 +29,7 @@ class NoteDatasourceImpl implements NoteDatasource {
   Future<Note> createNote({required Note note}) async {
     final isar = await isarDb;
 
-    final newNote = Note(
+    Note newNote = Note(
       title: note.title,
       description: note.description,
       createdAt: DateTime.now(),
@@ -37,7 +37,8 @@ class NoteDatasourceImpl implements NoteDatasource {
     );
 
     return isar.writeTxn(() async {
-      await isar.notes.put(newNote);
+      final noteId = await isar.notes.put(newNote);
+      newNote.id = noteId;
 
       return newNote;
     });

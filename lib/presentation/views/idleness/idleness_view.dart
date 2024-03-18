@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+final List<Map<String, String>> idlenessItems = [
+  {
+    'title': 'Short Story',
+    'subtitle': 'Read a short story',
+    'route': '/base/3/short-story',
+  },
+  {
+    'title': 'Art Images',
+    'subtitle': 'View art images',
+    'route': '/base/3/art-images-gallery',
+  },
+];
+
 class IdlenessView extends ConsumerStatefulWidget {
   const IdlenessView({super.key});
 
@@ -16,13 +29,21 @@ class IdlenessViewState extends ConsumerState<IdlenessView> {
       padding: const EdgeInsets.all(10),
       child: Container(
         alignment: Alignment.topCenter,
-        child: const Wrap(
+        child: Wrap(
           spacing: 5,
           runSpacing: 5,
           alignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center, // Add this line
           children: [
-            IdlenessItem(),
+            ...idlenessItems.map((item) {
+              return SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: IdlenessItem(
+                    title: item['title']!,
+                    subtitle: item['subtitle']!,
+                    route: item['route']!,
+                  ));
+            }).toList(),
           ],
         ),
       ),
@@ -31,7 +52,14 @@ class IdlenessViewState extends ConsumerState<IdlenessView> {
 }
 
 class IdlenessItem extends StatelessWidget {
-  const IdlenessItem({super.key});
+  final String title;
+  final String subtitle;
+  final String route;
+  const IdlenessItem(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +69,10 @@ class IdlenessItem extends StatelessWidget {
       child: Card(
           elevation: 3,
           child: ListTile(
-            title: const Text('Short Story'),
-            subtitle: const Text('Read a short story'),
+            title: Text(title),
+            subtitle: Text(subtitle),
             onTap: () {
-              context.go('/base/3/short-story');
+              context.go(route);
             },
           )),
     );

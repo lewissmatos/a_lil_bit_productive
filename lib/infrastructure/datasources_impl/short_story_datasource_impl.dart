@@ -36,10 +36,10 @@ class ShortStoryDatasourceImpl extends ShortStoryDatasource {
   @override
   Future<List<ShortStory?>> getShortStories() async {
     final response = await dio.get('/stories');
-    final storiesResult = List<ShortStoriesResponseModel>.from(
+    final storiesResponse = List<ShortStoriesResponseModel>.from(
         response.data.map((x) => ShortStoriesResponseModel.fromJson(x)));
 
-    final stories = storiesResult
+    final stories = storiesResponse
         .map((e) =>
             ShortStoryMapper.shortStoriesResponseModelToBookmarkedShortStory(e))
         .toList();

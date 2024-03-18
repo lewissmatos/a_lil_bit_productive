@@ -5,6 +5,9 @@ class ColorHelper {
     if (hexColor == null || hexColor.isEmpty) {
       return null;
     }
+    if (hexColor.contains('#')) {
+      hexColor = hexColor.replaceAll('#', '');
+    }
     return Color(int.parse('0xFF$hexColor'));
   }
 

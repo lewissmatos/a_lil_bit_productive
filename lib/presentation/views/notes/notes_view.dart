@@ -106,13 +106,15 @@ class _NoteItemState extends State<NoteItem> {
                     child: Text(
                       widget.note.title,
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 2,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Container(
+                    margin: const EdgeInsets.only(left: 6),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.5),
                       borderRadius: const BorderRadius.only(
@@ -121,8 +123,8 @@ class _NoteItemState extends State<NoteItem> {
                         bottomRight: Radius.circular(10),
                       ),
                     ),
-                    width: 40,
-                    height: 40,
+                    width: 30,
+                    height: 30,
                     child: Center(
                       child: Text(
                         NoteCategoryHelper()

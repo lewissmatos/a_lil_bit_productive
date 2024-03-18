@@ -50,9 +50,10 @@ class ReminderNotifier extends StateNotifier<List<Reminder>> {
   }
 
   Future<Reminder> addReminder({required Reminder reminder}) async {
-    state = [reminder, ...state];
-
-    await reminderRepository.createReminder(reminder: reminder);
+    final newReminder =
+        await reminderRepository.createReminder(reminder: reminder);
+    state = [newReminder, ...state];
+    state.sort((a, b) => a.date.compareTo(b.date));
     return reminder;
   }
 

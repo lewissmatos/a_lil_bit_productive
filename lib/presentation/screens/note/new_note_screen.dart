@@ -172,7 +172,7 @@ class NewNoteScreenState extends ConsumerState<NewNoteScreen> {
             Expanded(
               child: ListView(children: [
                 TextField(
-                  autofocus: true,
+                  autofocus: widget.noteId == null,
                   controller: titleController,
                   style: const TextStyle(
                       fontSize: 40, fontWeight: FontWeight.bold),

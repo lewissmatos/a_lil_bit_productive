@@ -27,16 +27,22 @@ class NoteNotifier extends StateNotifier<List<Note?>> {
       note: note,
     );
     state = [newNote ?? note, ...state];
-    return note;
+    return newNote;
   }
 
   Future<Note?> updateNote({required int noteId, required Note note}) async {
+    final index = state.indexWhere((n) => n?.id == noteId);
     Note? newNote = await noteRepository.updateNote(
       noteId: noteId,
       note: note,
     );
-    state = [newNote ?? note, ...state];
-    return note;
+
+    state = [
+      ...state.sublist(0, index),
+      newNote,
+      ...state.sublist(index + 1),
+    ];
+    return newNote;
   }
 
   Future<void> getNotes({String? search}) async {

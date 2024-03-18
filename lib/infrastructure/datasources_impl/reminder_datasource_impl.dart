@@ -32,9 +32,9 @@ class ReminderDatasourceImpl extends ReminderDatasource {
 
     reminder = reminder.copyWith(createdAt: DateTime.now());
     isar.writeTxn(() async {
-      await isar.reminders.put(reminder);
+      final reminderId = await isar.reminders.put(reminder);
+      reminder.id = reminderId;
     });
-
     return reminder;
   }
 
