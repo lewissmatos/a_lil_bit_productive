@@ -1,5 +1,6 @@
 import 'package:a_lil_bit_productive/helpers/color_helper.dart';
 import 'package:a_lil_bit_productive/presentation/providers/reminder/reminder_impl_provider.dart';
+import 'package:a_lil_bit_productive/presentation/widgets/shared/custom_filled_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -179,8 +180,9 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
               padding: EdgeInsets.only(bottom: 5),
               child: Text('title *'),
             ),
-            TextField(
+            CustomFilledTextField(
               controller: titleController,
+              hintText: 'example: beber romo 3 veces a la semana',
               onChanged: (value) {
                 if (value.isEmpty) {
                   setState(() {
@@ -193,22 +195,14 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
                   reminderData['title'] = value;
                 });
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'example: beber romo 3 veces a la semana',
-                hintStyle: const TextStyle(fontSize: 14),
-                filled: true,
-              ),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text('description'),
             ),
-            TextField(
+            CustomFilledTextField(
               controller: descriptionController,
+              hintText: 'enter description',
               onChanged: (value) {
                 setState(() {
                   reminderData['description'] = value;
@@ -216,63 +210,58 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
               },
               minLines: 5,
               maxLines: 15,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'enter description',
-                hintStyle: const TextStyle(fontSize: 14),
-                filled: true,
-              ),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text('tags'),
             ),
-            TextField(
+            CustomFilledTextField(
               controller: tagsController,
+              hintText: 'exercise, work, etc.',
               onChanged: (value) {
                 setState(() {
                   reminderData['tags'] = value;
                 });
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'exercise, work, etc.',
-                hintStyle: const TextStyle(fontSize: 14),
-                filled: true,
-              ),
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
               children: [
-                ElevatedButton.icon(
-                  onPressed: onOpenDatePicker,
-                  icon: const Icon(Icons.calendar_month_outlined),
-                  label: Text(
-                    DateFormat('yyyy-MM-dd')
-                        .format(reminderData['date'] ?? DateTime.now()),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: ElevatedButton.icon(
+                    onPressed: onOpenDatePicker,
+                    icon: const Icon(Icons.calendar_month_outlined),
+                    label: Text(
+                      DateFormat('yyyy-MM-dd')
+                          .format(reminderData['date'] ?? DateTime.now()),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                    ),
                   ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: onOpenTimePicker,
-                  icon: const Icon(Icons.timer_outlined),
-                  label: Text(
-                    DateFormat('HH:mm')
-                        .format(reminderData['date'] ?? DateTime.now()),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: ElevatedButton.icon(
+                    onPressed: onOpenTimePicker,
+                    icon: const Icon(Icons.timer_outlined),
+                    label: Text(
+                      DateFormat('HH:mm')
+                          .format(reminderData['date'] ?? DateTime.now()),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                    ),
                   ),
                 ),
               ],
@@ -305,6 +294,13 @@ class NewReminderScreenState extends ConsumerState<NewReminderScreen> {
               onPressed: isButtonDisabled ? null : saveReminder,
               label: const Text('save reminder'),
               icon: const Icon(Icons.save_outlined),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              ),
             ),
           ]),
         ),

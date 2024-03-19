@@ -4,4 +4,4 @@ import 'package:a_lil_bit_productive/infrastructure/repository_impl/reminder_rep
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final reminderRepositoryImplProvider = Provider<ReminderRepository>((ref) =>
-    ReminderRepositoryImpl(reminderDatasource: ReminderDatasourceImpl()));
+    ReminderRepositoryImpl(reminderDataSource: ReminderDataSourceImpl()));

@@ -2,7 +2,7 @@ import 'package:isar/isar.dart';
 
 part 'note.g.dart';
 
-enum CategoriesEnum { work, school, personal, others }
+enum NoteCategoriesEnum { work, school, personal, others }
 
 @collection
 class Note {
@@ -12,20 +12,20 @@ class Note {
   late DateTime? createdAt;
 
   @enumerated
-  late CategoriesEnum category;
+  late NoteCategoriesEnum category;
 
   Note({
     required this.title,
     this.description,
     this.createdAt,
-    this.category = CategoriesEnum.others,
+    this.category = NoteCategoriesEnum.others,
   });
 
   copyWith({
     String? title,
     String? description,
     DateTime? createdAt,
-    CategoriesEnum? category,
+    NoteCategoriesEnum? category,
   }) {
     return Note(
       title: title ?? this.title,

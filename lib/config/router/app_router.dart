@@ -1,5 +1,3 @@
-import 'package:a_lil_bit_productive/presentation/screens/short_story/bookmarked_stories_screen.dart';
-import 'package:a_lil_bit_productive/presentation/screens/note/new_note_screen.dart';
 import 'package:a_lil_bit_productive/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
@@ -57,6 +55,21 @@ final appRouter = GoRouter(
             path: 'art-images-gallery',
             builder: (context, state) {
               return const ArtImagesGalleryScreen();
+            },
+          ),
+          GoRoute(
+            path: 'add-expense',
+            builder: (context, state) {
+              return const NewExpenseScreen();
+            },
+          ),
+          GoRoute(
+            path: 'expense/:expenseId',
+            builder: (context, state) {
+              final expenseId = state.pathParameters['expenseId'] != null
+                  ? int.parse(state.pathParameters['expenseId']!)
+                  : null;
+              return NewExpenseScreen(expenseId: expenseId);
             },
           ),
         ],

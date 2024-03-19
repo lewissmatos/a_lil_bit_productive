@@ -1,6 +1,6 @@
 import '../entities/entities.dart';
 
-abstract class ShortStoryDatasource {
+abstract class ShortStoryDataSource {
   Future<List<ShortStory?>> getShortStories();
 
   Future<ShortStory> getShortStory();

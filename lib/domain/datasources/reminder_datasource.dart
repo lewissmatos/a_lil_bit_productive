@@ -1,6 +1,6 @@
 import '../entities/entities.dart';
 
-abstract class ReminderDatasource {
+abstract class ReminderDataSource {
   Future<List<Reminder>> getReminders({
     search = '',
     limit = 10,

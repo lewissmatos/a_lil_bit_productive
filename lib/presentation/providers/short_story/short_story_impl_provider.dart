@@ -4,4 +4,4 @@ import 'package:a_lil_bit_productive/infrastructure/repository_impl/short_story_
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final shortStoryRepositoryImplProvider = Provider<ShortStoryRepository>((ref) =>
-    ShortStoryRepositoryImpl(shortStoryDatasource: ShortStoryDatasourceImpl()));
+    ShortStoryRepositoryImpl(shortStoryDataSource: ShortStoryDataSourceImpl()));

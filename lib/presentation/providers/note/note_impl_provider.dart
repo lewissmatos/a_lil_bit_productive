@@ -4,4 +4,4 @@ import 'package:a_lil_bit_productive/infrastructure/repository_impl/note_reposit
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final noteRepositoryImplProvider = Provider<NoteRepository>(
-    (ref) => NoteRepositoryImpl(noteDatasource: NoteDatasourceImpl()));
+    (ref) => NoteRepositoryImpl(noteDataSource: NoteDataSourceImpl()));

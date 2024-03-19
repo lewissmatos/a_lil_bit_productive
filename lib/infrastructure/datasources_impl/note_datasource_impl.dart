@@ -3,10 +3,10 @@ import 'package:a_lil_bit_productive/domain/entities/entities.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-class NoteDatasourceImpl implements NoteDatasource {
+class NoteDataSourceImpl implements NoteDataSource {
   late Future<Isar> isarDb;
 
-  NoteDatasourceImpl() {
+  NoteDataSourceImpl() {
     isarDb = openIsarDb();
   }
 
@@ -17,6 +17,7 @@ class NoteDatasourceImpl implements NoteDatasource {
         [
           ReminderSchema,
           NoteSchema,
+          ExpenseSchema,
         ],
         inspector: true,
         directory: dir.path,

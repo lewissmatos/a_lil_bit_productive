@@ -8,14 +8,14 @@ class Category {
   Category({required this.color, required this.emoji});
 }
 
-typedef CategoryMap = Map<CategoriesEnum, Category>;
+typedef CategoryMap = Map<NoteCategoriesEnum, Category>;
 
 class NoteCategoryHelper {
   static final List<String> emojis = [
     '👨‍💻',
     '📚',
     '👤',
-    '🛠️',
+    '📝',
   ];
 
   static final List<Color> categoryColors = [
@@ -25,7 +25,7 @@ class NoteCategoryHelper {
     Colors.grey[500]!
   ];
 
-  Category getCategory(CategoriesEnum category) {
+  Category getCategory(NoteCategoriesEnum category) {
     final index = category.index;
     final color = categoryColors[index];
     final emoji = emojis[index];

@@ -1,6 +1,6 @@
 import '../entities/entities.dart';
 
-abstract class NoteDatasource {
+abstract class NoteDataSource {
   Future<List<Note?>> getNotes({
     search = '',
     limit = 10,

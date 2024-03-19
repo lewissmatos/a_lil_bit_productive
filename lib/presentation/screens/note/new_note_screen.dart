@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../domain/entities/entities.dart';
 import '../../providers/providers.dart';
-import '../../views/notes/note_category_helper.dart';
+import '../../../helpers/note_category_helper.dart';
 
 class NewNoteScreen extends ConsumerStatefulWidget {
   final int? noteId;
@@ -18,7 +18,7 @@ class NewNoteScreenState extends ConsumerState<NewNoteScreen> {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   bool isButtonDisabled = true;
-  CategoriesEnum selectedCategory = CategoriesEnum.others;
+  NoteCategoriesEnum selectedCategory = NoteCategoriesEnum.others;
   @override
   void initState() {
     super.initState();
@@ -147,7 +147,7 @@ class NewNoteScreenState extends ConsumerState<NewNoteScreen> {
                 spacing: 5,
                 runSpacing: 5,
                 children: [
-                  ...CategoriesEnum.values.map(
+                  ...NoteCategoriesEnum.values.map(
                     (category) {
                       final accentColor =
                           NoteCategoryHelper.categoryColors[category.index];

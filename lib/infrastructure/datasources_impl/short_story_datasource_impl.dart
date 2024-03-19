@@ -7,13 +7,13 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/entities.dart';
 
-class ShortStoryDatasourceImpl extends ShortStoryDatasource {
+class ShortStoryDataSourceImpl extends ShortStoryDataSource {
   final dio =
       Dio(BaseOptions(baseUrl: 'https://shortstories-api.onrender.com'));
 
   late Future<Isar> isarDb;
 
-  ShortStoryDatasourceImpl() {
+  ShortStoryDataSourceImpl() {
     isarDb = openIsarDb();
   }
 
@@ -25,6 +25,7 @@ class ShortStoryDatasourceImpl extends ShortStoryDatasource {
           ReminderSchema,
           NoteSchema,
           ShortStorySchema,
+          ExpenseSchema,
         ],
         inspector: true,
         directory: dir.path,

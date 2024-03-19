@@ -86,7 +86,7 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
     void onSaveNote() async {
       final createdNote = await ref.read(noteNotifierProvider.notifier).addNote(
               note: noteData.copyWith(
-            category: CategoriesEnum.personal,
+            category: NoteCategoriesEnum.personal,
             description: '${noteData.description}\n\n -${story.moral}',
           ));
       setState(() {
@@ -223,6 +223,7 @@ class ShortStoryScreenState extends ConsumerState<ShortStoryScreen> {
   }
 }
 
+// ignore: must_be_immutable
 class ShortStoryContainer extends StatefulWidget {
   late TextEditingController selectableDescriptionController;
   final ShortStory story;

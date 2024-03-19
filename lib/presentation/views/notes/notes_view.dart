@@ -1,4 +1,4 @@
-import 'package:a_lil_bit_productive/presentation/views/notes/note_category_helper.dart';
+import 'package:a_lil_bit_productive/helpers/note_category_helper.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

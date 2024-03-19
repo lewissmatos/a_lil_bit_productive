@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'note.dart';
+part of 'expense.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,96 +9,99 @@ part of 'note.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetNoteCollection on Isar {
-  IsarCollection<Note> get notes => this.collection();
+extension GetExpenseCollection on Isar {
+  IsarCollection<Expense> get expenses => this.collection();
 }
 
-const NoteSchema = CollectionSchema(
-  name: r'Note',
-  id: 6284318083599466921,
+const ExpenseSchema = CollectionSchema(
+  name: r'Expense',
+  id: -4604318666888508206,
   properties: {
-    r'category': PropertySchema(
+    r'amount': PropertySchema(
       id: 0,
+      name: r'amount',
+      type: IsarType.double,
+    ),
+    r'category': PropertySchema(
+      id: 1,
       name: r'category',
       type: IsarType.byte,
-      enumMap: _NotecategoryEnumValueMap,
+      enumMap: _ExpensecategoryEnumValueMap,
     ),
-    r'createdAt': PropertySchema(
-      id: 1,
-      name: r'createdAt',
+    r'date': PropertySchema(
+      id: 2,
+      name: r'date',
       type: IsarType.dateTime,
     ),
-    r'description': PropertySchema(
-      id: 2,
-      name: r'description',
-      type: IsarType.string,
+    r'method': PropertySchema(
+      id: 3,
+      name: r'method',
+      type: IsarType.byte,
+      enumMap: _ExpensemethodEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'title',
       type: IsarType.string,
     )
   },
-  estimateSize: _noteEstimateSize,
-  serialize: _noteSerialize,
-  deserialize: _noteDeserialize,
-  deserializeProp: _noteDeserializeProp,
+  estimateSize: _expenseEstimateSize,
+  serialize: _expenseSerialize,
+  deserialize: _expenseDeserialize,
+  deserializeProp: _expenseDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {},
   embeddedSchemas: {},
-  getId: _noteGetId,
-  getLinks: _noteGetLinks,
-  attach: _noteAttach,
+  getId: _expenseGetId,
+  getLinks: _expenseGetLinks,
+  attach: _expenseAttach,
   version: '3.1.0+1',
 );
 
-int _noteEstimateSize(
-  Note object,
+int _expenseEstimateSize(
+  Expense object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   bytesCount += 3 + object.title.length * 3;
   return bytesCount;
 }
 
-void _noteSerialize(
-  Note object,
+void _expenseSerialize(
+  Expense object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeByte(offsets[0], object.category.index);
-  writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.title);
+  writer.writeDouble(offsets[0], object.amount);
+  writer.writeByte(offsets[1], object.category.index);
+  writer.writeDateTime(offsets[2], object.date);
+  writer.writeByte(offsets[3], object.method.index);
+  writer.writeString(offsets[4], object.title);
 }
 
-Note _noteDeserialize(
+Expense _expenseDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Note(
-    category: _NotecategoryValueEnumMap[reader.readByteOrNull(offsets[0])] ??
-        NoteCategoriesEnum.others,
-    createdAt: reader.readDateTimeOrNull(offsets[1]),
-    description: reader.readStringOrNull(offsets[2]),
-    title: reader.readString(offsets[3]),
+  final object = Expense(
+    amount: reader.readDouble(offsets[0]),
+    category: _ExpensecategoryValueEnumMap[reader.readByteOrNull(offsets[1])] ??
+        ExpenseCategoryEnum.Others,
+    date: reader.readDateTimeOrNull(offsets[2]),
+    method: _ExpensemethodValueEnumMap[reader.readByteOrNull(offsets[3])] ??
+        ExpenseMethodEnum.Cash,
+    title: reader.readString(offsets[4]),
   );
   object.id = id;
   return object;
 }
 
-P _noteDeserializeProp<P>(
+P _expenseDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -106,54 +109,71 @@ P _noteDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (_NotecategoryValueEnumMap[reader.readByteOrNull(offset)] ??
-          NoteCategoriesEnum.others) as P;
+      return (reader.readDouble(offset)) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (_ExpensecategoryValueEnumMap[reader.readByteOrNull(offset)] ??
+          ExpenseCategoryEnum.Others) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
+      return (_ExpensemethodValueEnumMap[reader.readByteOrNull(offset)] ??
+          ExpenseMethodEnum.Cash) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-const _NotecategoryEnumValueMap = {
-  'work': 0,
-  'school': 1,
-  'personal': 2,
-  'others': 3,
+const _ExpensecategoryEnumValueMap = {
+  'Supermarket': 0,
+  'Transport': 1,
+  'Shopping': 2,
+  'Hanging': 3,
+  'Services': 4,
+  'Others': 5,
 };
-const _NotecategoryValueEnumMap = {
-  0: NoteCategoriesEnum.work,
-  1: NoteCategoriesEnum.school,
-  2: NoteCategoriesEnum.personal,
-  3: NoteCategoriesEnum.others,
+const _ExpensecategoryValueEnumMap = {
+  0: ExpenseCategoryEnum.Supermarket,
+  1: ExpenseCategoryEnum.Transport,
+  2: ExpenseCategoryEnum.Shopping,
+  3: ExpenseCategoryEnum.Hanging,
+  4: ExpenseCategoryEnum.Services,
+  5: ExpenseCategoryEnum.Others,
+};
+const _ExpensemethodEnumValueMap = {
+  'Cash': 0,
+  'Card': 1,
+  'Loan': 2,
+};
+const _ExpensemethodValueEnumMap = {
+  0: ExpenseMethodEnum.Cash,
+  1: ExpenseMethodEnum.Credit,
+  2: ExpenseMethodEnum.Loan,
 };
 
-Id _noteGetId(Note object) {
+Id _expenseGetId(Expense object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _noteGetLinks(Note object) {
+List<IsarLinkBase<dynamic>> _expenseGetLinks(Expense object) {
   return [];
 }
 
-void _noteAttach(IsarCollection<dynamic> col, Id id, Note object) {
+void _expenseAttach(IsarCollection<dynamic> col, Id id, Expense object) {
   object.id = id;
 }
 
-extension NoteQueryWhereSort on QueryBuilder<Note, Note, QWhere> {
-  QueryBuilder<Note, Note, QAfterWhere> anyId() {
+extension ExpenseQueryWhereSort on QueryBuilder<Expense, Expense, QWhere> {
+  QueryBuilder<Expense, Expense, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
-  QueryBuilder<Note, Note, QAfterWhereClause> idEqualTo(Id id) {
+extension ExpenseQueryWhere on QueryBuilder<Expense, Expense, QWhereClause> {
+  QueryBuilder<Expense, Expense, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -162,7 +182,7 @@ extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<Expense, Expense, QAfterWhereClause> idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -184,7 +204,7 @@ extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<Expense, Expense, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -193,7 +213,7 @@ extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<Expense, Expense, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -202,7 +222,7 @@ extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterWhereClause> idBetween(
+  QueryBuilder<Expense, Expense, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -219,9 +239,72 @@ extension NoteQueryWhere on QueryBuilder<Note, Note, QWhereClause> {
   }
 }
 
-extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
-  QueryBuilder<Note, Note, QAfterFilterCondition> categoryEqualTo(
-      NoteCategoriesEnum value) {
+extension ExpenseQueryFilter
+    on QueryBuilder<Expense, Expense, QFilterCondition> {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> amountEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'amount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> amountGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'amount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> amountLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'amount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> amountBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'amount',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryEqualTo(
+      ExpenseCategoryEnum value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'category',
@@ -230,8 +313,8 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> categoryGreaterThan(
-    NoteCategoriesEnum value, {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryGreaterThan(
+    ExpenseCategoryEnum value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -243,8 +326,8 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> categoryLessThan(
-    NoteCategoriesEnum value, {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryLessThan(
+    ExpenseCategoryEnum value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -256,9 +339,9 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> categoryBetween(
-    NoteCategoriesEnum lower,
-    NoteCategoriesEnum upper, {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryBetween(
+    ExpenseCategoryEnum lower,
+    ExpenseCategoryEnum upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -273,59 +356,59 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtIsNull() {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdAt',
+        property: r'date',
       ));
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtIsNotNull() {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdAt',
+        property: r'date',
       ));
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtEqualTo(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateEqualTo(
       DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdAt',
+        property: r'date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtGreaterThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateGreaterThan(
     DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'createdAt',
+        property: r'date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtLessThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateLessThan(
     DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'createdAt',
+        property: r'date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> createdAtBetween(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> dateBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
@@ -333,7 +416,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'createdAt',
+        property: r'date',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -342,153 +425,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -497,7 +434,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -510,7 +447,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -523,7 +460,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> idBetween(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -540,7 +477,60 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleEqualTo(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> methodEqualTo(
+      ExpenseMethodEnum value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'method',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> methodGreaterThan(
+    ExpenseMethodEnum value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'method',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> methodLessThan(
+    ExpenseMethodEnum value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'method',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> methodBetween(
+    ExpenseMethodEnum lower,
+    ExpenseMethodEnum upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'method',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -553,7 +543,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleGreaterThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -568,7 +558,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleLessThan(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -583,7 +573,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleBetween(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -602,7 +592,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleStartsWith(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -615,7 +605,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleEndsWith(
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -628,7 +618,8 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleContains(String value,
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -639,7 +630,8 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleMatches(String pattern,
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -650,7 +642,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleIsEmpty() {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'title',
@@ -659,7 +651,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Note, Note, QAfterFilterCondition> titleIsNotEmpty() {
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> titleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'title',
@@ -669,143 +661,176 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 }
 
-extension NoteQueryObject on QueryBuilder<Note, Note, QFilterCondition> {}
+extension ExpenseQueryObject
+    on QueryBuilder<Expense, Expense, QFilterCondition> {}
 
-extension NoteQueryLinks on QueryBuilder<Note, Note, QFilterCondition> {}
+extension ExpenseQueryLinks
+    on QueryBuilder<Expense, Expense, QFilterCondition> {}
 
-extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
-  QueryBuilder<Note, Note, QAfterSortBy> sortByCategory() {
+extension ExpenseQuerySortBy on QueryBuilder<Expense, Expense, QSortBy> {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'amount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByAmountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'amount', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByCategory() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'category', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByCategoryDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByCategoryDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'category', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedAt() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByDate() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
+      return query.addSortBy(r'date', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedAtDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByDateDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
+      return query.addSortBy(r'date', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByDescription() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByMethod() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
+      return query.addSortBy(r'method', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByDescriptionDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByMethodDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
+      return query.addSortBy(r'method', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByTitle() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> sortByTitleDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
-  QueryBuilder<Note, Note, QAfterSortBy> thenByCategory() {
+extension ExpenseQuerySortThenBy
+    on QueryBuilder<Expense, Expense, QSortThenBy> {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'amount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByAmountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'amount', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByCategory() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'category', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByCategoryDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByCategoryDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'category', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByCreatedAt() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByDate() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
+      return query.addSortBy(r'date', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByCreatedAtDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByDateDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
+      return query.addSortBy(r'date', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterSortBy> thenByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Note, Note, QAfterSortBy> thenById() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByTitle() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByMethod() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'method', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByMethodDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'method', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Note, Note, QAfterSortBy> thenByTitleDesc() {
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
-  QueryBuilder<Note, Note, QDistinct> distinctByCategory() {
+extension ExpenseQueryWhereDistinct
+    on QueryBuilder<Expense, Expense, QDistinct> {
+  QueryBuilder<Expense, Expense, QDistinct> distinctByAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'amount');
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QDistinct> distinctByCategory() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'category');
     });
   }
 
-  QueryBuilder<Note, Note, QDistinct> distinctByCreatedAt() {
+  QueryBuilder<Expense, Expense, QDistinct> distinctByDate() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdAt');
+      return query.addDistinctBy(r'date');
     });
   }
 
-  QueryBuilder<Note, Note, QDistinct> distinctByDescription(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Expense, Expense, QDistinct> distinctByMethod() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'method');
     });
   }
 
-  QueryBuilder<Note, Note, QDistinct> distinctByTitle(
+  QueryBuilder<Expense, Expense, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
@@ -813,32 +838,40 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
   }
 }
 
-extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
-  QueryBuilder<Note, int, QQueryOperations> idProperty() {
+extension ExpenseQueryProperty
+    on QueryBuilder<Expense, Expense, QQueryProperty> {
+  QueryBuilder<Expense, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Note, NoteCategoriesEnum, QQueryOperations> categoryProperty() {
+  QueryBuilder<Expense, double, QQueryOperations> amountProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'amount');
+    });
+  }
+
+  QueryBuilder<Expense, ExpenseCategoryEnum, QQueryOperations>
+      categoryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'category');
     });
   }
 
-  QueryBuilder<Note, DateTime?, QQueryOperations> createdAtProperty() {
+  QueryBuilder<Expense, DateTime?, QQueryOperations> dateProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdAt');
+      return query.addPropertyName(r'date');
     });
   }
 
-  QueryBuilder<Note, String?, QQueryOperations> descriptionProperty() {
+  QueryBuilder<Expense, ExpenseMethodEnum, QQueryOperations> methodProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'description');
+      return query.addPropertyName(r'method');
     });
   }
 
-  QueryBuilder<Note, String, QQueryOperations> titleProperty() {
+  QueryBuilder<Expense, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'title');
     });

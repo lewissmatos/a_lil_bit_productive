@@ -3,10 +3,10 @@ import '../../domain/entities/entities.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ReminderDatasourceImpl extends ReminderDatasource {
+class ReminderDataSourceImpl extends ReminderDataSource {
   late Future<Isar> isarDb;
 
-  ReminderDatasourceImpl() {
+  ReminderDataSourceImpl() {
     isarDb = openIsarDb();
   }
 
@@ -18,6 +18,7 @@ class ReminderDatasourceImpl extends ReminderDatasource {
           ReminderSchema,
           NoteSchema,
           ShortStorySchema,
+          ExpenseSchema,
         ],
         inspector: true,
         directory: dir.path,

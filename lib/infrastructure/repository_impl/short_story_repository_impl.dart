@@ -4,26 +4,26 @@ import 'package:a_lil_bit_productive/domain/repository/short_story_repository.da
 import '../../domain/entities/entities.dart';
 
 class ShortStoryRepositoryImpl extends ShortStoryRepository {
-  final ShortStoryDatasource shortStoryDatasource;
+  final ShortStoryDataSource shortStoryDataSource;
 
-  ShortStoryRepositoryImpl({required this.shortStoryDatasource});
+  ShortStoryRepositoryImpl({required this.shortStoryDataSource});
   @override
   Future<List<ShortStory?>> getShortStories() async {
-    return await shortStoryDatasource.getShortStories();
+    return await shortStoryDataSource.getShortStories();
   }
 
   @override
   Future<ShortStory> getShortStory() async {
-    return await shortStoryDatasource.getShortStory();
+    return await shortStoryDataSource.getShortStory();
   }
 
   @override
   Future<ShortStory?> bookmarkShortStory({required ShortStory story}) async {
-    return await shortStoryDatasource.bookmarkShortStory(story: story);
+    return await shortStoryDataSource.bookmarkShortStory(story: story);
   }
 
   @override
   Future<List<ShortStory?>> getBookmarkedStories() async {
-    return await shortStoryDatasource.getBookmarkedStories();
+    return await shortStoryDataSource.getBookmarkedStories();
   }
 }
