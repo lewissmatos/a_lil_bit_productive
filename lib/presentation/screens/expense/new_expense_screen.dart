@@ -26,6 +26,7 @@ class NewExpenseScreenState extends ConsumerState<NewExpenseScreen> {
     amount: 0,
     category: ExpenseCategoryEnum.Others,
     method: ExpenseMethodEnum.Cash,
+    date: DateTime.now(),
   );
   late bool isButtonDisabled = false;
   late TextEditingController amountController;
@@ -69,6 +70,7 @@ class NewExpenseScreenState extends ConsumerState<NewExpenseScreen> {
         category: expenseData.category,
         method: expenseData.method,
         title: expenseData.title,
+        date: expenseData.date,
       );
       isButtonDisabled = expense.amount == 0 || expense.title.isEmpty;
     });

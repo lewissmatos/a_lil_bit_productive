@@ -36,15 +36,14 @@ class _ExpensesListViewState extends State<ExpensesListView> {
         }
 
         if (index == 0 ||
-            isDifferentDate(
-              widget.expenses[index - 1]!.date!,
-              expense.date!,
-            )) {
+            isDifferentDate(widget.expenses[index - 1]!.date!, expense.date!)) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateFormat('MMMM yyyy').format(expense.date!),
+                expense.date != null
+                    ? DateFormat('MMMM yyyy').format(expense.date!)
+                    : '',
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),

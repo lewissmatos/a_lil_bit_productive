@@ -98,7 +98,7 @@ class ExpenseListItemState extends ConsumerState<ExpenseListItem> {
             widget.expense.title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 20),
           ),
           subtitle: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -110,15 +110,15 @@ class ExpenseListItemState extends ConsumerState<ExpenseListItem> {
                     color: ExpenseMethodHelper.getExpenseMethod(
                       widget.expense.method,
                     ).color,
-                    fontSize: 12,
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(width: 5),
                 Icon(
-                  widget.expense.method == ExpenseMethodEnum.Cash
-                      ? Icons.money_rounded
-                      : Icons.credit_card_rounded,
-                  size: 14,
+                  ExpenseMethodHelper.getExpenseMethod(
+                    widget.expense.method,
+                  ).icon,
+                  size: 15,
                   color: ExpenseMethodHelper.getExpenseMethod(
                     widget.expense.method,
                   ).color,

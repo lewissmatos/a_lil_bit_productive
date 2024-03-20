@@ -6,3 +6,4 @@ export './art_image/art_image_impl_provider.dart';
 export './short_story/short_story_impl_provider.dart';
 export './expense/expense_impl_provider.dart';
 export './expense/expense_notifier_provider.dart';
+export './expenses_filters/expenses_filters_provider.dart';

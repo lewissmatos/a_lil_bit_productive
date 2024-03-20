@@ -19,37 +19,47 @@ class ExpensesViewState extends ConsumerState<ExpensesView> {
     fetchExpenses();
   }
 
-  void fetchExpenses() async {
+  void fetchExpenses({ExpensesFilter? filter}) async {
     final expenseNotifier = ref.read(expenseNotifierProvider.notifier);
-
-    await expenseNotifier.getExpenses();
+    await expenseNotifier.getExpenses(filter: filter);
   }
 
   @override
   Widget build(BuildContext context) {
     List<Expense?> expenses = ref.watch(expenseNotifierProvider);
     return Scaffold(
+      endDrawer: ExpensesViewFilters(
+        refetchExpenses: fetchExpenses,
+      ),
       body: Center(
           child: CustomScrollView(
         slivers: [
           SliverAppBar(
             floating: true,
             expandedHeight: 400,
-            collapsedHeight: 200,
-            flexibleSpace:
-                expenses.isNotEmpty ? ExpensesCharts(expenses: expenses) : null,
+            collapsedHeight: 270,
+            flexibleSpace: expenses.isNotEmpty
+                ? ExpensesCharts(
+                    expenses: expenses,
+                  )
+                : null,
             forceMaterialTransparency: true,
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.filter_alt_outlined),
+              Builder(
+                builder: (context) => IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  icon: const Icon(Icons.filter_alt_outlined),
+                ),
               ),
             ],
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 10, bottom: 80),
                 child: ExpensesListView(expenses: expenses),
               )
             ]),

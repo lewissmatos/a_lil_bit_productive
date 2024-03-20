@@ -60,7 +60,7 @@ class _NewExpenseMethodSelectorState extends State<NewExpenseMethodSelector> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
+                        vertical: 10, horizontal: 12),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,11 +69,14 @@ class _NewExpenseMethodSelectorState extends State<NewExpenseMethodSelector> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                method.name,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  method.name,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                               if (isSelected)

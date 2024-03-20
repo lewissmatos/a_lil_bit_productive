@@ -32,7 +32,6 @@ class ExpenseDataSourceImpl extends ExpenseDataSource {
   Future<Expense?> addExpense({required Expense expense}) async {
     final isar = await isarDb;
 
-    expense = expense.copyWith(date: DateTime.now());
     isar.writeTxn(() async {
       final expenseId = await isar.expenses.put(expense);
       expense.id = expenseId;
@@ -84,34 +83,32 @@ class ExpenseDataSourceImpl extends ExpenseDataSource {
   }
 
   @override
-  Future<List<Expense?>> getExpenses({
-    DateTime? dateFrom,
-    DateTime? dateTo,
-    ExpenseCategoryEnum? category,
-    ExpenseMethodEnum? type,
-    String? title,
-    double? value,
-  }) async {
+  Future<List<Expense?>> getExpenses({ExpensesFilter? filter}) async {
     final isar = await isarDb;
 
     late List<Expense?> expenses;
 
+    print(
+        '${filter?.amountFrom} ${filter?.amountTo} + ${filter?.dateFrom} + ${filter?.dateTo} +  ${filter?.category} ${filter?.method}, ${filter?.title}');
+
     expenses = await isar.txn(() async {
       return await isar.expenses
           .filter()
-          .optional(title != null, (q) => q.titleContains(title!))
-          .optional(value != null, (q) => q.amountBetween(value!, value))
           .optional(
-            dateFrom != null && dateTo != null,
-            (q) => q.dateBetween(dateFrom!, dateTo!),
+              filter?.title != null, (q) => q.titleContains(filter!.title!))
+          .optional(filter?.amountFrom != null && filter!.amountTo != null,
+              (q) => q.amountBetween(filter!.amountFrom!, filter.amountTo!))
+          .optional(
+            filter?.dateFrom != null && filter?.dateTo != null,
+            (q) => q.dateBetween(filter!.dateFrom!, filter.dateTo!),
           )
           .optional(
-            category != null,
-            (q) => q.categoryEqualTo(category!),
+            filter?.category != null,
+            (q) => q.categoryEqualTo(filter!.category!),
           )
           .optional(
-            type != null,
-            (q) => q.methodEqualTo(type!),
+            filter?.method != null,
+            (q) => q.methodEqualTo(filter!.method!),
           )
           .sortByDateDesc()
           .findAll();

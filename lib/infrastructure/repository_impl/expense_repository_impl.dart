@@ -1,4 +1,5 @@
 import 'package:a_lil_bit_productive/domain/datasources/expense_datasource.dart';
+import 'package:a_lil_bit_productive/domain/entities/entities.dart';
 import 'package:a_lil_bit_productive/domain/entities/expense.dart';
 import 'package:a_lil_bit_productive/domain/repository/expense_repository.dart';
 
@@ -23,22 +24,8 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   }
 
   @override
-  Future<List<Expense?>> getExpenses({
-    DateTime? dateFrom,
-    DateTime? dateTo,
-    ExpenseCategoryEnum? category,
-    ExpenseMethodEnum? type,
-    String? title,
-    double? value,
-  }) async {
-    return await expenseDataSource.getExpenses(
-      dateFrom: dateFrom,
-      dateTo: dateTo,
-      category: category,
-      type: type,
-      title: title,
-      value: value,
-    );
+  Future<List<Expense?>> getExpenses({ExpensesFilter? filter}) async {
+    return await expenseDataSource.getExpenses(filter: filter);
   }
 
   @override

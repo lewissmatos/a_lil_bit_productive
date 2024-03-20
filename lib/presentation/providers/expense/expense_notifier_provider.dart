@@ -23,23 +23,9 @@ class ExpenseNotifier extends StateNotifier<List<Expense?>> {
     required this.expenseRepository,
   }) : super([]);
 
-  Future<List<Expense?>> getExpenses({
-    DateTime? dateFrom,
-    DateTime? dateTo,
-    ExpenseCategoryEnum? category,
-    ExpenseMethodEnum? type,
-    String? title,
-    double? value,
-  }) async {
+  Future<List<Expense?>> getExpenses({ExpensesFilter? filter}) async {
     isFetching = true;
-    final expenses = await expenseRepository.getExpenses(
-      dateFrom: dateFrom,
-      dateTo: dateTo,
-      category: category,
-      type: type,
-      title: title,
-      value: value,
-    );
+    final expenses = await expenseRepository.getExpenses(filter: filter);
     state = expenses;
     isFetching = false;
     return expenses;

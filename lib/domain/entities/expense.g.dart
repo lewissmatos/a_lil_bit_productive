@@ -143,7 +143,7 @@ const _ExpensecategoryValueEnumMap = {
 };
 const _ExpensemethodEnumValueMap = {
   'Cash': 0,
-  'Card': 1,
+  'Credit': 1,
   'Loan': 2,
 };
 const _ExpensemethodValueEnumMap = {
