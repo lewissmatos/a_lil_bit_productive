@@ -9,4 +9,5 @@ abstract class ExpenseDataSource {
     required Expense expense,
     required int id,
   });
+  Future<double> getTotalExpenses({ExpensesFilter? filter});
 }

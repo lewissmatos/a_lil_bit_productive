@@ -88,14 +88,15 @@ class ExpenseDataSourceImpl extends ExpenseDataSource {
 
     late List<Expense?> expenses;
 
-    print(
-        '${filter?.amountFrom} ${filter?.amountTo} + ${filter?.dateFrom} + ${filter?.dateTo} +  ${filter?.category} ${filter?.method}, ${filter?.title}');
-
     expenses = await isar.txn(() async {
       return await isar.expenses
           .filter()
           .optional(
               filter?.title != null, (q) => q.titleContains(filter!.title!))
+          .optional(filter?.amountFrom != null,
+              (q) => q.amountGreaterThan(filter!.amountFrom!))
+          .optional(filter?.amountTo != null,
+              (q) => q.amountGreaterThan(filter!.amountTo!))
           .optional(filter?.amountFrom != null && filter!.amountTo != null,
               (q) => q.amountBetween(filter!.amountFrom!, filter.amountTo!))
           .optional(
@@ -115,5 +116,17 @@ class ExpenseDataSourceImpl extends ExpenseDataSource {
     });
 
     return expenses;
+  }
+
+  @override
+  Future<double> getTotalExpenses({ExpensesFilter? filter}) async {
+    late double total = 0.0;
+    final expenses = await getExpenses(filter: filter);
+
+    for (var expense in expenses) {
+      total += expense!.amount;
+    }
+
+    return total;
   }
 }

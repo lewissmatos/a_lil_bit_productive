@@ -37,15 +37,30 @@ class _ExpensesListViewState extends State<ExpensesListView> {
 
         if (index == 0 ||
             isDifferentDate(widget.expenses[index - 1]!.date!, expense.date!)) {
+          final monthlyTotal = widget.expenses
+              .where((e) =>
+                  e!.date!.month == expense.date!.month &&
+                  e.date!.year == expense.date!.year)
+              .fold<double>(0,
+                  (previousValue, element) => previousValue + element!.amount);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                expense.date != null
-                    ? DateFormat('MMMM yyyy').format(expense.date!)
-                    : '',
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    expense.date != null
+                        ? DateFormat('MMMM yyyy').format(expense.date!)
+                        : '',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    'Total: \$$monthlyTotal',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
               ),
               listItem,
             ],

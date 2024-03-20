@@ -57,4 +57,12 @@ class ExpenseNotifier extends StateNotifier<List<Expense?>> {
     await expenseRepository.deleteExpense(id: expense.id);
     state = state.where((e) => e!.id != expense.id).toList();
   }
+
+  Future<double> getTotalExpenses({ExpensesFilter? filter}) async {
+    final total = state.fold<double>(
+      0,
+      (previousValue, element) => previousValue + (element?.amount ?? 0),
+    );
+    return total;
+  }
 }

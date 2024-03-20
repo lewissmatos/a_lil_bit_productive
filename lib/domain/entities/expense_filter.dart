@@ -38,4 +38,28 @@ class ExpensesFilter {
       amountTo: amountTo ?? this.amountTo,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ExpensesFilter &&
+        other.dateFrom == dateFrom &&
+        other.dateTo == dateTo &&
+        other.category == category &&
+        other.method == method &&
+        other.title == title &&
+        other.amountFrom == amountFrom &&
+        other.amountTo == amountTo;
+  }
+
+  @override
+  int get hashCode =>
+      dateFrom.hashCode ^
+      dateTo.hashCode ^
+      category.hashCode ^
+      method.hashCode ^
+      title.hashCode ^
+      amountFrom.hashCode ^
+      amountTo.hashCode;
 }

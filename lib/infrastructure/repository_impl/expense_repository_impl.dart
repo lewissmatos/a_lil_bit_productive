@@ -33,4 +33,9 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
       {required Expense expense, required int id}) async {
     return await expenseDataSource.updateExpense(expense: expense, id: id);
   }
+
+  @override
+  Future<double> getTotalExpenses({ExpensesFilter? filter}) async {
+    return await expenseDataSource.getTotalExpenses(filter: filter);
+  }
 }

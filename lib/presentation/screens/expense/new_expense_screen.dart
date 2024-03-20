@@ -139,7 +139,8 @@ class NewExpenseScreenState extends ConsumerState<NewExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('New Expense'),
+          title: Text(
+              widget.expenseId == null ? 'Add New Expense' : 'Edit Expense'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -147,7 +148,7 @@ class NewExpenseScreenState extends ConsumerState<NewExpenseScreen> {
             children: [
               TextField(
                 controller: amountController,
-                autofocus: true,
+                autofocus: widget.expenseId == null,
                 style:
                     const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 keyboardType: const TextInputType.numberWithOptions(

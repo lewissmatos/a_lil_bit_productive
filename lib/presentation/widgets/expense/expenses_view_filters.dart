@@ -22,10 +22,21 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
   late ExpensesFilter filterOptions = ExpensesFilter();
   late TextEditingController amountFromController;
   late TextEditingController amountToController;
+  late TextEditingController titleController;
 
   @override
   void initState() {
-    filterOptions = ref.read(expensesFilterProvider.notifier).state;
+    super.initState();
+
+    filterOptions = filterOptions.copyWith(
+      category: ref.read(expensesFilterProvider).category,
+      dateFrom: ref.read(expensesFilterProvider).dateFrom,
+      dateTo: ref.read(expensesFilterProvider).dateTo,
+      method: ref.read(expensesFilterProvider).method,
+      title: ref.read(expensesFilterProvider).title,
+      amountFrom: ref.read(expensesFilterProvider).amountFrom,
+      amountTo: ref.read(expensesFilterProvider).amountTo,
+    );
     amountFromController = TextEditingController(
         text: filterOptions.amountFrom != null
             ? filterOptions.amountFrom.toString()
@@ -35,11 +46,11 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
         text: filterOptions.amountTo != null
             ? filterOptions.amountTo.toString()
             : '');
-    super.initState();
+
+    titleController = TextEditingController(text: filterOptions.title);
   }
 
   void updateFilters(ExpensesFilter filter) {
-    print(filter.method);
     setState(() {
       filterOptions.copyWith(
         category: filter.category,
@@ -51,8 +62,6 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
         amountTo: filter.amountTo,
       );
     });
-
-    ref.read(expensesFilterProvider.notifier).state = filterOptions;
   }
 
   void onOpeDateFromDatePicker() async {
@@ -93,6 +102,22 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
 
   void closeEndDrawer() {
     Scaffold.of(context).closeEndDrawer();
+  }
+
+  Future<void> saveChanges() async {
+    await widget.refetchExpenses(filter: filterOptions);
+    ref.read(expensesFilterProvider.notifier).state = filterOptions;
+
+    closeEndDrawer();
+  }
+
+  Future<void> resetFilters() async {
+    filterOptions = ExpensesFilter();
+    amountFromController.clear();
+    amountToController.clear();
+    updateFilters(filterOptions);
+    await widget.refetchExpenses(filter: filterOptions);
+    ref.read(expensesFilterProvider.notifier).state = ExpensesFilter();
   }
 
   @override
@@ -195,14 +220,14 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
                   labelPadding: const EdgeInsets.symmetric(
                     horizontal: 3,
                   ),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.black.withOpacity(0.3),
                   onSelected: (selected) {
                     if (selected) {
                       filterOptions.category = null;
                       updateFilters(filterOptions);
                     }
                   },
-                  selectedColor: Colors.red.withOpacity(0.7),
+                  selectedColor: Colors.black.withOpacity(0.7),
                   selected: filterOptions.category == null,
                   label: const Text('all'),
                   labelStyle: const TextStyle(fontSize: 12),
@@ -246,14 +271,19 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
                   labelPadding: const EdgeInsets.symmetric(
                     horizontal: 3,
                   ),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.black.withOpacity(0.3),
                   onSelected: (selected) {
                     if (selected) {
-                      filterOptions.method = null;
-                      updateFilters(filterOptions);
+                      setState(() {
+                        var newFilter = filterOptions;
+
+                        newFilter.method = null;
+
+                        updateFilters(newFilter);
+                      });
                     }
                   },
-                  selectedColor: Colors.red.withOpacity(0.7),
+                  selectedColor: Colors.black.withOpacity(0.7),
                   selected: filterOptions.method == null,
                   label: const Text('all'),
                   labelStyle: const TextStyle(fontSize: 12),
@@ -326,7 +356,7 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
               ],
             ),
             CustomFilledTextField(
-              // controller: titleController,
+              controller: titleController,
               hintText: 'title',
               onChanged: (value) {
                 filterOptions = filterOptions.copyWith(
@@ -343,15 +373,15 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
                 SizedBox(
                   child: TextButton.icon(
                     onPressed: () async {
-                      updateFilters(ExpensesFilter());
-                      await widget.refetchExpenses(filter: ExpensesFilter());
+                      await resetFilters();
                       closeEndDrawer();
                     },
                     label: const Text(
                       'Reset',
                       style: TextStyle(color: Colors.red),
                     ),
-                    icon: const Icon(Icons.restore_outlined, color: Colors.red),
+                    icon:
+                        const Icon(Icons.clear_all_outlined, color: Colors.red),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -363,10 +393,11 @@ class ExpensesViewFiltersState extends ConsumerState<ExpensesViewFilters> {
                 ),
                 SizedBox(
                   child: ElevatedButton.icon(
-                    onPressed: () async {
-                      await widget.refetchExpenses(filter: filterOptions);
-                      closeEndDrawer();
-                    },
+                    onPressed: filterOptions == ref.read(expensesFilterProvider)
+                        ? null
+                        : () async {
+                            await saveChanges();
+                          },
                     label: const Text('Apply filters'),
                     icon: const Icon(Icons.save_outlined),
                     style: ElevatedButton.styleFrom(
