@@ -75,82 +75,17 @@ class ExpensesViewState extends ConsumerState<ExpensesView> {
                   onPressed: () {
                     Scaffold.of(context).openEndDrawer();
                   },
-                  icon: const Icon(Icons.filter_alt_outlined),
+                  icon: Icon(expensesFilter == ExpensesFilter()
+                      ? Icons.filter_alt_outlined
+                      : Icons.filter_alt),
                 ),
               ),
             ],
           ),
           if (expensesFilter != ExpensesFilter())
             SliverToBoxAdapter(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Filters:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        child: SizedBox(
-                          height: 50,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              if (expensesFilter.dateFrom != null ||
-                                  expensesFilter.dateTo != null)
-                                Chip(
-                                  label: Text(
-                                      '${expensesFilter.dateFrom != null ? DateFormat.yMMMd().format(expensesFilter.dateFrom!) : ''}${expensesFilter.dateTo != null ? ' - ${DateFormat.yMMMd().format(expensesFilter.dateTo!)}' : ''}'),
-                                ),
-                              const SizedBox(
-                                  width: 10), // Add a gap of 10 pixels
-
-                              if (expensesFilter.amountFrom != null ||
-                                  expensesFilter.amountTo != null)
-                                Chip(
-                                  label: Text(
-                                      '\$${expensesFilter.amountFrom != null ? expensesFilter.amountFrom!.toStringAsFixed(2) : ''}${expensesFilter.amountTo != null ? ' - \$${expensesFilter.amountTo?.toStringAsFixed(2)}' : ''}'),
-                                ),
-                              const SizedBox(
-                                  width: 10), // Add a gap of 10 pixels
-                              if (expensesFilter.category != null)
-                                Chip(
-                                  color: MaterialStateProperty.all(
-                                      ExpenseCategoryHelper.getExpenseCategory(
-                                              expensesFilter.category!)
-                                          .color
-                                          .withOpacity(0.7)),
-                                  label: Text(expensesFilter.category!.name),
-                                ),
-                              const SizedBox(
-                                  width: 10), // Add a gap of 10 pixels
-                              if (expensesFilter.method != null)
-                                Chip(
-                                  color: MaterialStateProperty.all(
-                                      ExpenseMethodHelper.getExpenseMethod(
-                                              expensesFilter.method!)
-                                          .color
-                                          .withOpacity(0.7)),
-                                  label: Text(expensesFilter.method!.name),
-                                ),
-                              const SizedBox(
-                                  width: 10), // Add a gap of 10 pixels
-                              if (expensesFilter.title != null)
-                                Chip(
-                                  label: Text(expensesFilter.title!),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-            ),
+                child:
+                    ExpensesViewFiltersViewer(expensesFilter: expensesFilter)),
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(

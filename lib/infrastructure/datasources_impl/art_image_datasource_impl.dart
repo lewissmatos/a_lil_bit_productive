@@ -8,8 +8,7 @@ import '../../domain/entities/entities.dart';
 
 class ArtImageDataSourceImpl extends ArtImageDataSource {
   final dio = Dio(BaseOptions(baseUrl: 'https://api.pexels.com/v1', headers: {
-    'Authorization':
-        'WzBLmgVT77Mygu5LfXWcRaB7tbppXiHBCgTVpHATRnEi9hMKGSsN8gEr', //Environment.pexelsApiKey
+    'Authorization': Environment.pexelsApiKey,
   }));
 
   @override
